@@ -76,20 +76,18 @@
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@null"
+        android:hint="@string/enter_password"
+        app:boxBackgroundColor="@null"
         app:endIconMode="password_toggle"
+        app:hintTextColor="@color/gray_400"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
-        android:hint="@string/enter_password"
-        app:hintTextColor="@color/gray_400"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:boxBackgroundColor="@null"
         tools:ignore="MissingConstraints">
-
 
 
         <com.google.android.material.textfield.TextInputEditText
@@ -97,46 +95,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:inputType="textPassword"
-            />
+            android:inputType="textPassword" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editTextPassword_errorText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:helperText="Неверные данные. Восстановить аккаунт?"
-            app:errorEnabled="true"
+            android:textColor="@color/red"
             android:visibility="invisible"
-            android:textColor="@color/red"/>
+            app:errorEnabled="true"
+            app:helperText="Неверные данные. Восстановить аккаунт?" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/enter"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
-        android:paddingStart="48dp"
-        android:paddingEnd="48dp"
-        android:onClick="enterInAccount"
-        tools:ignore="MissingConstraints" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_recover_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/recover_password"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_login"
+        android:onClick="recoverPassword"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
-        android:layout_marginTop="8dp"
+        android:text="@string/recover_password"
         app:backgroundTint="@color/rr"
-        android:onClick="recoverPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/auth"
         tools:ignore="MissingConstraints" />
 
     <com.google.android.material.button.MaterialButton
@@ -152,5 +135,38 @@
         android:layout_marginTop="8dp"
         android:onClick="registerAccount"
         tools:ignore="MissingConstraints" />
+
+
+    <LinearLayout
+        android:id="@+id/auth"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
+        tools:ignore="MissingConstraints">
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_gravity="center"
+            android:layout_weight="5"
+            android:id="@+id/button_login"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="enterInAccount"
+            android:text="@string/enter"
+            tools:ignore="MissingConstraints"
+            android:layout_marginEnd="16dp"/>
+
+        <com.google.android.gms.common.SignInButton
+            android:onClick="signWithGoogle"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/signIn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            tools:ignore="MissingConstraints"
+            android:layout_marginStart="16dp"/>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

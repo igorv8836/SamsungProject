@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">SamsungProject</string>
+    <string name="logo">LOGO</string>
+    <string name="name_app">RAPIDITY</string>
+    <string name="enter_email">Введите почту</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="password_display">password_display</string>
+    <string name="enter">Войти</string>
+    <string name="recover_password">Восстановить пароль</string>
+    <string name="registrate">Зарегистрироваться</string>
 </resources>

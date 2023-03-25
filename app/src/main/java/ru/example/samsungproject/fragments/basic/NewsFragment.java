@@ -9,16 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ru.example.samsungproject.R;
+import ru.example.samsungproject.databinding.FragmentNewsBinding;
 import ru.example.samsungproject.databinding.FragmentSettingsBinding;
 
 public class NewsFragment extends Fragment {
 
-    private FragmentSettingsBinding binding;
+    private FragmentNewsBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentSettingsBinding.inflate(inflater, container, false);
+        binding = FragmentNewsBinding.inflate(inflater, container, false);
 
 
 

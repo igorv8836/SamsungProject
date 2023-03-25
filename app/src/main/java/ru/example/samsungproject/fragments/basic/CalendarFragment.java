@@ -9,16 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ru.example.samsungproject.R;
-import ru.example.samsungproject.databinding.FragmentSettingsBinding;
+import ru.example.samsungproject.databinding.FragmentCalendarBinding;
 
 public class CalendarFragment extends Fragment {
 
-    private FragmentSettingsBinding binding;
+    private FragmentCalendarBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentSettingsBinding.inflate(inflater, container, false);
+        binding = FragmentCalendarBinding.inflate(inflater, container, false);
 
 
 

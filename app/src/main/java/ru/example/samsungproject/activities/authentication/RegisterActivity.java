@@ -1,4 +1,4 @@
-package ru.example.samsungproject;
+package ru.example.samsungproject.activities.authentication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import ru.example.samsungproject.activities.MainActivity;
 import ru.example.samsungproject.databinding.ActivityRegisterBinding;
 
 public class RegisterActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package ru.example.samsungproject;
+package ru.example.samsungproject.activities.authentication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;

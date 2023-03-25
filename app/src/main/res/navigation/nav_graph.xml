@@ -1,6 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@layout/fragment_news"
     android:id="@+id/nav_graph">
+
+    <action
+        android:id="@+id/action_to_NewsFragment"
+        app:destination="@id/NewsFragment" />
+    <action
+        android:id="@+id/action_to_SearchEventsFragment"
+        app:destination="@id/SearchEventsFragment" />
+    <action
+        android:id="@+id/action_to_MyEventsFragment"
+        app:destination="@id/MyEventsFragment" />
+    <action
+        android:id="@+id/action_to_CalendarFragment"
+        app:destination="@id/CalendarFragment" />
+    <action
+        android:id="@+id/action_to_SettingsFragment"
+        app:destination="@id/SettingsFragment" />
+
+    <fragment
+        android:id="@+id/NewsFragment"
+        android:name="ru.example.samsungproject.fragments.basic.NewsFragment"
+        android:label="fragment_first"
+        tools:layout="@layout/fragment_news">
+<!--        <action-->
+<!--            android:id="@+id/action_to_SearchEventsFragment"-->
+<!--            app:destination="@id/SearchEventsFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_MyEventsFragment"-->
+<!--            app:destination="@id/MyEventsFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_CalendarFragment"-->
+<!--            app:destination="@id/CalendarFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_SettingsFragment"-->
+<!--            app:destination="@id/SettingsFragment" />-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/SearchEventsFragment"
+        android:name="ru.example.samsungproject.fragments.basic.NewsFragment"
+        android:label="fragment_first"
+        tools:layout="@layout/fragment_search_events">
+<!--        <action-->
+<!--            android:id="@+id/action_to_MyEventsFragment"-->
+<!--            app:destination="@id/MyEventsFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_SettingsFragment"-->
+<!--            app:destination="@id/SettingsFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_CalendarFragment"-->
+<!--            app:destination="@id/CalendarFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_NewsFragment"-->
+<!--            app:destination="@id/NewsFragment" />-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/MyEventsFragment"
+        android:name="ru.example.samsungproject.fragments.basic.NewsFragment"
+        android:label="fragment_first"
+        tools:layout="@layout/fragment_my_events">
+<!--        <action-->
+<!--            android:id="@+id/action_to_NewsFragment"-->
+<!--            app:destination="@id/NewsFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_SearchEventsFragment"-->
+<!--            app:destination="@id/SearchEventsFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_CalendarFragment"-->
+<!--            app:destination="@id/CalendarFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_SettingsFragment"-->
+<!--            app:destination="@id/SettingsFragment" />-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/CalendarFragment"
+        android:name="ru.example.samsungproject.fragments.basic.NewsFragment"
+        android:label="fragment_first"
+        tools:layout="@layout/fragment_calendar">
+<!--        <action-->
+<!--            android:id="@+id/action_to_NewsFragment"-->
+<!--            app:destination="@id/NewsFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_SearchEventsFragment"-->
+<!--            app:destination="@id/SearchEventsFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_MyEventsFragment"-->
+<!--            app:destination="@id/MyEventsFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_SettingsFragment"-->
+<!--            app:destination="@id/SettingsFragment" />-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/SettingsFragment"
+        android:name="ru.example.samsungproject.fragments.basic.NewsFragment"
+        android:label="fragment_first"
+        tools:layout="@layout/fragment_settings">
+<!--        <action-->
+<!--            android:id="@+id/action_to_CalendarFragment"-->
+<!--            app:destination="@id/CalendarFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_SearchEventsFragment"-->
+<!--            app:destination="@id/SearchEventsFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_MyEventsFragment"-->
+<!--            app:destination="@id/MyEventsFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_to_NewsFragment"-->
+<!--            app:destination="@id/NewsFragment" />-->
+    </fragment>
 
 </navigation>

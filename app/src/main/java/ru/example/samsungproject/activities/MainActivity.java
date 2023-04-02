@@ -24,8 +24,10 @@ import ru.example.samsungproject.fragments.basic.MyEventsFragment;
 import ru.example.samsungproject.fragments.basic.NewsFragment;
 import ru.example.samsungproject.fragments.basic.SearchEventsFragment;
 import ru.example.samsungproject.fragments.basic.SettingsFragment;
+import ru.example.samsungproject.supportingClass.PermissionUtils;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int PERMISSION_STORAGE = 101;
     private ActivityMainBinding binding;
     private FirebaseAuth mAuth;
     private ActionBar actionBar;
@@ -53,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
         calendarFragment = new CalendarFragment();
         settingsFragment = new SettingsFragment();
 
+        if (!PermissionUtils.hasPermissions(MainActivity.this))
+            PermissionUtils.requestPermissions(MainActivity.this, PERMISSION_STORAGE);
+
         //проверка на авторизацию, есть ли авторизация, либо null
         FirebaseUser currentUser = mAuth.getCurrentUser(); //текущий пользователь
         if (currentUser != null) {
@@ -64,9 +69,9 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-        actionBar = getSupportActionBar();
-        if (actionBar.isShowing())
-            actionBar.hide();
+//        actionBar = getSupportActionBar();
+//        if (actionBar.isShowing())
+//            actionBar.hide();
 
         fragmentManager = getSupportFragmentManager();
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:textStyle="bold"
+        android:id="@+id/title"
+        tools:text="Обновление 1.0"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        android:id="@+id/description"
+        tools:text="Обновление и Выход нашего мобильного приложения:  Мы с гордостью представляем Вам наше новое мобильное приложение, которое было полностью переработано и улучшено. Мы внесли множество новых функций и возможностей, которые помогут вам удобнее и быстрее пользоваться нашим сервисом.  Среди новых функций вы найдете возможность настроить интерфейс приложения, выбрать нужный язык и многое другое. Мы также сделали наше приложение быстрее и более стабильным, что позволит вам получать доступ к нужной информации еще быстрее и без каких-либо задержек.  Мы также рады сообщить о выходе нашего приложения на новых платформах, что позволит еще большему количеству пользователей пользоваться нашим сервисом. Наше приложение теперь доступно на Android"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        android:gravity="start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_margin="8dp"
+        tools:text="1 марта 2023"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description"
+        android:gravity="start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

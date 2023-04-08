@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 //            actionBar.hide();
 
         fragmentManager = getSupportFragmentManager();
-
         startFirstFragment();
 
         binding.navMenu.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {

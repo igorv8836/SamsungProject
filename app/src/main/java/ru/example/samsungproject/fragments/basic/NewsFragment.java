@@ -1,10 +1,12 @@
 package ru.example.samsungproject.fragments.basic;
 
+import android.app.Application;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -32,19 +34,15 @@ public class NewsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = FragmentNewsBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(NewsFragmentViewModel.class);
+        viewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new NewsFragmentViewModel(getActivity().getApplication());
+            }
+        }).get(NewsFragmentViewModel.class);
 
-        ArrayList<NewsElement> newsElements = new ArrayList<>();
-        for (int i = 0; i < 100; i++)
-            newsElements.add(new NewsElement(
-                    "Обновление " + String.valueOf(i),
-                    "fdsslkadjfkaspiowoqeruqjasdlfskdfjsdfsafsfjafskldhfiuehsdafs\nsadfasd\nsdfasdfewqrf\nasdfsadfasweqrqwefsad\nkslj",
-                    "12.12.2020"
-            ));
-
-//        newsAdapter = new NewsAdapter(getActivity(), newsElements);
-//        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        binding.recyclerView.setAdapter(newsAdapter);
+        viewModel.LoadNewsData();
 
         viewModel.news.observe(getViewLifecycleOwner(), news -> {
             Log.w("TAG", news.toString());
@@ -52,21 +50,8 @@ public class NewsFragment extends Fragment {
                 newsAdapter = new NewsAdapter(getActivity(), news);
                 binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 binding.recyclerView.setAdapter(newsAdapter);
-//                newsElements.clear();
-//                for(NewsElement element: news)
-//                    newsElements.add(element);
-//                newsAdapter.setData(news);
-//                newsAdapter.notifyDataSetChanged();
             }
         });
-
         return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        viewModel.LoadNewsFromLocal();
-        viewModel.DownloadNews();
     }
 }

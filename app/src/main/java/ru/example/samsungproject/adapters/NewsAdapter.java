@@ -1,11 +1,9 @@
 package ru.example.samsungproject.adapters;
 
 import android.content.Context;
-import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ru.example.samsungproject.databinding.NewsItemBinding;
-import ru.example.samsungproject.supportingClass.NewsElement;
+import ru.example.samsungproject.supportingClasses.NewsElement;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 

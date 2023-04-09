@@ -24,7 +24,7 @@ import ru.example.samsungproject.fragments.basic.MyEventsFragment;
 import ru.example.samsungproject.fragments.basic.NewsFragment;
 import ru.example.samsungproject.fragments.basic.SearchEventsFragment;
 import ru.example.samsungproject.fragments.basic.SettingsFragment;
-import ru.example.samsungproject.supportingClass.PermissionUtils;
+import ru.example.samsungproject.supportingClasses.PermissionUtils;
 
 public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_STORAGE = 101;

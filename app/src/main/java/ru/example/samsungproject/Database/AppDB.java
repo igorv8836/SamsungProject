@@ -1,4 +1,4 @@
-package ru.example.samsungproject.sql;
+package ru.example.samsungproject.Database;
 
 import android.app.Application;
 
@@ -6,12 +6,11 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import ru.example.samsungproject.supportingClass.NewsElement;
+import ru.example.samsungproject.supportingClasses.NewsElement;
 
 @Database(entities = {NewsElement.class}, version = 1)
 public abstract class AppDB extends RoomDatabase {
     private static AppDB instance;
-    public abstract NewsDao newsDao();
 
     public static synchronized AppDB getInstance(Application application){
         if (instance == null){

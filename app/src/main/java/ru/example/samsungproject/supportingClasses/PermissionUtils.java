@@ -1,4 +1,4 @@
-package ru.example.samsungproject.supportingClass;
+package ru.example.samsungproject.supportingClasses;
 
 import android.Manifest;
 import android.app.Activity;

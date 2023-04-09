@@ -3,55 +3,50 @@ package ru.example.samsungproject.repositories;
 import android.app.Application;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-import ru.example.samsungproject.sql.AppDB;
-import ru.example.samsungproject.supportingClass.NewsElement;
-import ru.example.samsungproject.supportingClass.OnNewsLoadedListener;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import ru.example.samsungproject.Database.AppDB;
+import ru.example.samsungproject.Database.FirestoreDB;
+import ru.example.samsungproject.supportingClasses.NewsElement;
+import ru.example.samsungproject.supportingClasses.OnNewsLoadedListener;
 
 public class NewsRepository{
+    private FirestoreDB firestoreDB;
 
-    public final AppDB appDB;
-    public final FirebaseFirestore firebaseFirestore;
-
-    public NewsRepository(Application application) {
-        appDB = AppDB.getInstance(application);
-        firebaseFirestore = FirebaseFirestore.getInstance();
+    public NewsRepository() {
+        firestoreDB = new FirestoreDB();
     }
 
-    public void LoadNewsFromDB(){
+    public Observable<ArrayList<NewsElement>> LoadNewsFromNetwork() {
+        return Observable.create(new ObservableOnSubscribe<ArrayList<NewsElement>>() {
+            @Override
+            public void subscribe(ObservableEmitter<ArrayList<NewsElement>> emitter) throws Exception {
+                firestoreDB.LoadNews(new OnNewsLoadedListener() {
+                    @Override
+                    public void onNewsLoaded(ArrayList<NewsElement> newsElements) {
+                        emitter.onNext(newsElements);
+                        emitter.onComplete();
+                    }
 
-    }
-
-    public void LoadNewsFromNetwork(OnNewsLoadedListener listener) {
-        firebaseFirestore.collection("news")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        ArrayList<NewsElement> list = new ArrayList<>();
-                        for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
-                            list.add(new NewsElement(
-                                    documentSnapshot.get("Title").toString(),
-                                    documentSnapshot.get("Description").toString(),
-                                    documentSnapshot.get("Date").toString()));
-                            Log.w("TAG", documentSnapshot.getId() + " --- " + documentSnapshot.getData());
-                        }
-                        Collections.reverse(list);
-
-                        listener.onNewsLoaded(list);
-                    } else {
-                        Log.w("LoadNewsFromNetwork", "Данные не загрузились");
+                    @Override
+                    public void onNewsNotLoaded() {
+                        emitter.onError(new Exception("News not loaded"));
                     }
                 });
+            }
+        });
     }
 }
 

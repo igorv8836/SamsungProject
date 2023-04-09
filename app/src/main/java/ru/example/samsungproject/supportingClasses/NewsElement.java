@@ -1,11 +1,9 @@
-package ru.example.samsungproject.supportingClass;
+package ru.example.samsungproject.supportingClasses;
 
 import android.util.Log;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import java.text.DateFormat;
 
 @Entity(tableName = "news_table")
 public class NewsElement {

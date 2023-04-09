@@ -11,9 +11,17 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ru.example.samsungproject.activities.MainActivity;
 import ru.example.samsungproject.databinding.ActivityRegisterBinding;
@@ -22,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore firebaseFirestore;
     private ActionBar actionBar;
     private Intent intent;
 
@@ -37,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         mAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
         intent = getIntent();
         if (!intent.getStringExtra("Email").isEmpty())
             binding.editTextEmailInputText.setText(intent.getStringExtra("Email"));
@@ -46,9 +56,8 @@ public class RegisterActivity extends AppCompatActivity {
     public void registerAccount(View view) {
         String email = binding.editTextEmailInputText.getText().toString().trim();
         String password = binding.editTextPasswordInputText.getText().toString().trim();
-        Log.i("login", email);
-        Log.i("password", password);
-        if (email.isEmpty() || password.isEmpty()){
+        String name = binding.editTextNicknameInputText.getText().toString().trim();
+        if (email.isEmpty() || password.isEmpty() || name.isEmpty()){
             Toast.makeText(this, "Вы ничего не ввели!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -56,14 +65,35 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }else{
-                    binding.textView.setText("Ошибка: " + task.getException().toString());
+                if (task.isSuccessful()) {
+                    CollectionReference collection = firebaseFirestore.collection("users");
+                    DocumentReference newDocRef = collection.document(email);
+
+                    Map<String, String> data = new HashMap<>();
+                    data.put("Email", email);
+                    data.put("Name", name);
+
+                    newDocRef.set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            binding.textView.setText("Ошибка: " + task.getException().toString());
+                        }
+                    });
+                } else{
+                    RegisterError(task.getException());
                 }
             }
         });
+    }
+
+    public void RegisterError(Exception e){
+        Toast.makeText(this, "Ошибка" + e.toString(), Toast.LENGTH_SHORT).show();
     }
 }

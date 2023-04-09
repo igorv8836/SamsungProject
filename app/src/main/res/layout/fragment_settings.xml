@@ -11,12 +11,13 @@
         android:id="@+id/profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/rr"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginTop="4dp"
         android:layout_marginBottom="8dp"
         android:paddingStart="24dp"
         android:paddingTop="12dp"
@@ -25,46 +26,52 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/user_base_logo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/profile_image"
             app:layout_constraintBottom_toBottomOf="@id/profile"
             app:layout_constraintStart_toStartOf="@id/profile"
             app:layout_constraintTop_toTopOf="@id/profile"
             tools:ignore="MissingConstraints" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/imageView2"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEmail"
+            tools:ignore="MissingConstraints"
+            android:maxLength="20"
+            tools:text="Васильев Игорь Юрьевич" />
+
+        <TextView
+            android:id="@+id/textViewEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/imageView2"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="@+id/profile"
             tools:ignore="MissingConstraints"
-            tools:text="Васильев Игорь"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            tools:text="igorv8836@mail.ru"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
-            android:textSize="18sp"
-            tools:ignore="MissingConstraints" />
+            android:maxLines="3"
+            android:maxLength="20"
+            tools:text="igorv8836@mail.ru" />
 
         <ImageView
+            android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:src="@drawable/arrow"
-            app:layout_constraintTop_toTopOf="@id/profile"
             app:layout_constraintBottom_toBottomOf="@id/profile"
             app:layout_constraintEnd_toEndOf="@id/profile"
-            android:layout_marginEnd="8dp"
-            />
+            app:layout_constraintTop_toTopOf="@id/profile" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -72,10 +79,11 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/profile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+
 
 
     </androidx.core.widget.NestedScrollView>

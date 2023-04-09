@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -24,7 +25,9 @@ import ru.example.samsungproject.fragments.basic.MyEventsFragment;
 import ru.example.samsungproject.fragments.basic.NewsFragment;
 import ru.example.samsungproject.fragments.basic.SearchEventsFragment;
 import ru.example.samsungproject.fragments.basic.SettingsFragment;
+import ru.example.samsungproject.repositories.FirestoreRepository;
 import ru.example.samsungproject.supportingClasses.PermissionUtils;
+import ru.example.samsungproject.viewModels.SettingsFragmentViewModel;
 
 public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_STORAGE = 101;
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private CalendarFragment calendarFragment;
     private SettingsFragment settingsFragment;
     private FragmentManager fragmentManager;
+    //public SettingsFragmentViewModel settingsFragmentViewModel;
 
 
 
@@ -54,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
         myEventsFragment = new MyEventsFragment();
         calendarFragment = new CalendarFragment();
         settingsFragment = new SettingsFragment();
+
+        //settingsFragmentViewModel = new ViewModelProvider(this).get(SettingsFragmentViewModel.class);
+
+
 
         if (!PermissionUtils.hasPermissions(MainActivity.this))
             PermissionUtils.requestPermissions(MainActivity.this, PERMISSION_STORAGE);

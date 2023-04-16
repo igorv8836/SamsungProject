@@ -8,11 +8,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+
+import java.security.Provider;
 
 import ru.example.samsungproject.databinding.FragmentProfileBinding;
+import ru.example.samsungproject.viewModels.ProfileFragmentViewModel;
 
 public class ProfileFragment extends Fragment{
     private FragmentProfileBinding binding;
+    private ProfileFragmentViewModel viewModel;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -25,7 +31,6 @@ public class ProfileFragment extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        viewModel = new ViewModelProvider(this).get(ProfileFragmentViewModel.class);
     }
 }

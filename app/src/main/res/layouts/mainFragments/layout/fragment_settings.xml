@@ -61,6 +61,7 @@
             tools:text="igorv8836@mail.ru" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@id/profile"
@@ -96,7 +97,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/settings"
+                android:id="@+id/button_settings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settings"
@@ -111,7 +112,7 @@
             </com.google.android.material.button.MaterialButton>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/aboutApp"
+                android:id="@+id/button_aboutApp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/aboutApp"
@@ -126,7 +127,7 @@
             </com.google.android.material.button.MaterialButton>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/feedback"
+                android:id="@+id/button_feedback"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/feedback"

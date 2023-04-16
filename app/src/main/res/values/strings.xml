@@ -9,11 +9,18 @@
     <string name="recover_password">Восстановить пароль</string>
     <string name="registrate">Зарегистрироваться</string>
     <string name="recover">Восстановить</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nicknameOrSurnamewithname">Введите никнейм или фамилию с именем</string>
     <string name="profile">Профиль</string>
     <string name="feedback">Обратная связь</string>
     <string name="aboutApp">О приложении</string>
     <string name="settings">Настройки</string>
+
+    <string name="changePassword">Поменять пароль</string>
+    <string name="nickname">Никнейм или ФИО</string>
+    <string name="fullname">Фамилия и имя</string>
+    <string name="save">Сохранить</string>
+    <string name="changepassword">Сменить пароль</string>
+    <string name="enter_new_password">Введите новый пароль</string>
 </resources>

@@ -22,6 +22,19 @@ android {
         viewBinding true
     }
 
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    'src/main/res/layouts/activities',
+                    'src/main/res/layouts/mainFragments',
+                    'src/main/res/layouts/settingsFragment',
+                    'src/main/res/layouts/supporting',
+                    'src/main/res/layouts',
+                    'src/main/res',
+            ]
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false

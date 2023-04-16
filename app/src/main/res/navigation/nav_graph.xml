@@ -21,6 +21,22 @@
         android:id="@+id/action_menu_5"
         app:destination="@id/settingsFragment"/>
 
+
+    <action
+        android:id="@+id/action_profile"
+        app:destination="@id/profileFragment"/>
+    <action
+        android:id="@+id/action_small_settings"
+        app:destination="@id/smallSettingsFragment"/>
+    <action
+        android:id="@+id/action_about_app"
+        app:destination="@id/aboutAppFragment"/>
+    <action
+        android:id="@+id/action_feedback"
+        app:destination="@id/feedbackFragment"/>
+
+
+
     <fragment
         android:id="@+id/calendarFragment"
         android:name="ru.example.samsungproject.fragments.basic.CalendarFragment"
@@ -46,4 +62,29 @@
         android:name="ru.example.samsungproject.fragments.basic.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+
+
+
+    <fragment
+        android:id="@+id/aboutAppFragment"
+        android:name="ru.example.samsungproject.fragments.fragmentsOfSettings.AboutAppFragment"
+        android:label="fragment_about_app"
+        tools:layout="@layout/fragment_about_app" />
+    <fragment
+        android:id="@+id/feedbackFragment"
+        android:name="ru.example.samsungproject.fragments.fragmentsOfSettings.FeedbackFragment"
+        android:label="fragment_feedback"
+        tools:layout="@layout/fragment_feedback" />
+    <fragment
+        android:id="@+id/smallSettingsFragment"
+        android:name="ru.example.samsungproject.fragments.fragmentsOfSettings.SmallSettingsFragment"
+        android:label="fragment_small_settings"
+        tools:layout="@layout/fragment_small_settings" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="ru.example.samsungproject.fragments.fragmentsOfSettings.ProfileFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile"/>
+
+
 </navigation>

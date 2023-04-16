@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -30,20 +31,10 @@ import ru.example.samsungproject.supportingClasses.PermissionUtils;
 import ru.example.samsungproject.viewModels.SettingsFragmentViewModel;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int PERMISSION_STORAGE = 101;
     private ActivityMainBinding binding;
-    private FirebaseAuth mAuth;
     private ActionBar actionBar;
-
-    private NewsFragment newsFragment;
-    private SearchEventsFragment searchEventsFragment;
-    private MyEventsFragment myEventsFragment;
-    private CalendarFragment calendarFragment;
-    private SettingsFragment settingsFragment;
-    private FragmentManager fragmentManager;
-    //public SettingsFragmentViewModel settingsFragmentViewModel;
-
-
+    private static final int PERMISSION_STORAGE = 101;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,20 +42,10 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        actionBar = getSupportActionBar();
+        if (actionBar != null && actionBar.isShowing()) actionBar.hide();
+
         mAuth = FirebaseAuth.getInstance();
-
-        newsFragment = new NewsFragment();
-        searchEventsFragment = new SearchEventsFragment();
-        myEventsFragment = new MyEventsFragment();
-        calendarFragment = new CalendarFragment();
-        settingsFragment = new SettingsFragment();
-
-        //settingsFragmentViewModel = new ViewModelProvider(this).get(SettingsFragmentViewModel.class);
-
-
-
-        if (!PermissionUtils.hasPermissions(MainActivity.this))
-            PermissionUtils.requestPermissions(MainActivity.this, PERMISSION_STORAGE);
 
         //проверка на авторизацию, есть ли авторизация, либо null
         FirebaseUser currentUser = mAuth.getCurrentUser(); //текущий пользователь
@@ -77,12 +58,8 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-//        actionBar = getSupportActionBar();
-//        if (actionBar.isShowing())
-//            actionBar.hide();
-
-        fragmentManager = getSupportFragmentManager();
-        startFirstFragment();
+        if (!PermissionUtils.hasPermissions(MainActivity.this))
+            PermissionUtils.requestPermissions(MainActivity.this, PERMISSION_STORAGE);
 
         binding.navMenu.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
@@ -90,40 +67,29 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.menu_news:
-                        FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();
-                        fragmentTransaction1.replace(R.id.fragment_container, newsFragment);
-                        fragmentTransaction1.commit();
+                        Navigation.findNavController(binding.navHostFragment)
+                                .navigate(R.id.action_menu_1);
                         return true;
 
                     case R.id.menu_search:
-                        FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
-                        fragmentTransaction2.replace(R.id.fragment_container, searchEventsFragment);
-                        fragmentTransaction2.commit();
+                        Navigation.findNavController(binding.navHostFragment)
+                                .navigate(R.id.action_menu_2);
                         return true;
-
 
                     case R.id.menu_events:
-                        FragmentTransaction fragmentTransaction3 = fragmentManager.beginTransaction();
-                        fragmentTransaction3.replace(R.id.fragment_container, myEventsFragment);
-                        fragmentTransaction3.commit();
+                        Navigation.findNavController(binding.navHostFragment)
+                                .navigate(R.id.action_menu_3);
                         return true;
-
-
 
                     case R.id.menu_calendar:
-                        FragmentTransaction fragmentTransaction4 = fragmentManager.beginTransaction();
-                        fragmentTransaction4.replace(R.id.fragment_container, calendarFragment);
-                        fragmentTransaction4.commit();
+                        Navigation.findNavController(binding.navHostFragment)
+                                .navigate(R.id.action_menu_4);
                         return true;
-
-
 
                     case R.id.menu_settings:
-                        FragmentTransaction fragmentTransaction5 = fragmentManager.beginTransaction();
-                        fragmentTransaction5.replace(R.id.fragment_container, settingsFragment);
-                        fragmentTransaction5.commit();
+                        Navigation.findNavController(binding.navHostFragment)
+                                .navigate(R.id.action_menu_5);
                         return true;
-
                 }
                 return false;
             }
@@ -135,11 +101,4 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
     }
-
-    protected void startFirstFragment(){
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container, newsFragment);
-        fragmentTransaction.commit();
-    }
-
 }

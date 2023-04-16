@@ -16,14 +16,23 @@
         app:layout_constraintGuide_percent="0.04"
         />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.45"
+        />
+
     <ImageView
         android:id="@+id/base_icon"
-        android:layout_width="277dp"
-        android:layout_height="307dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/base_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideline_1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_2"
         android:contentDescription="@string/logo" />
 
     <TextView

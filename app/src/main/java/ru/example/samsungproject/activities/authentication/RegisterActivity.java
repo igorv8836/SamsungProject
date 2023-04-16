@@ -22,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import ru.example.samsungproject.activities.MainActivity;
 import ru.example.samsungproject.databinding.ActivityRegisterBinding;
@@ -67,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     CollectionReference collection = firebaseFirestore.collection("users");
-                    DocumentReference newDocRef = collection.document(email);
+                    DocumentReference newDocRef = collection.document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
 
                     Map<String, String> data = new HashMap<>();
                     data.put("Email", email);
@@ -94,6 +95,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void RegisterError(Exception e){
-        Toast.makeText(this, "Ошибка" + e.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Ошибка " + e.toString(), Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,11 +1,10 @@
 package ru.example.samsungproject.fragments.basic;
 
-import android.app.Application;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -25,15 +24,15 @@ public class SettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(SettingsFragmentViewModel.class);
 
+        viewModel.LoadUserData();
+
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
-
-
-        viewModel.LoadUserData();
 
         viewModel.Email.observe(getViewLifecycleOwner(), email -> {
             binding.textViewEmail.setText(email);

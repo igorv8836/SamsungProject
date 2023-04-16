@@ -5,11 +5,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.security.cert.Extension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
@@ -20,13 +19,9 @@ import ru.example.samsungproject.interfaces.OnNewsLoadedListener;
 
 public class FirestoreDB {
     private final FirebaseFirestore firebaseFirestore;
-    private final FirebaseAuth mAuth;
-    private final FirebaseUser currentUser;
 
     public FirestoreDB() {
         this.firebaseFirestore = FirebaseFirestore.getInstance();
-        this.mAuth = FirebaseAuth.getInstance();
-        this.currentUser = mAuth.getCurrentUser();
     }
 
     public void LoadNews(OnNewsLoadedListener listener){
@@ -64,26 +59,26 @@ public class FirestoreDB {
                 });
     }
 
-    public void LoadProfile(OnProfileLoadedListener listener){
+    public void LoadProfile(OnProfileLoadedListener listener, String Uid){
         firebaseFirestore.collection("users")
-                .document(Objects.requireNonNull(currentUser.getEmail()))
+                .document(Objects.requireNonNull(Uid))
                 .get()
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-
-                        StringBuilder email = new StringBuilder(Objects.requireNonNull(task.getResult().get("Email")).toString());
-                        if (email.length() > 20){
-                            email.replace(17, 20, "...");
+                    if (task.isSuccessful() && task.getResult().get("Email") != null && task.getResult().get("Name") != null){
+                        StringBuilder email = new StringBuilder(task.getResult().get("Email").toString());
+                        if (email.length() > 40){
+                            email.replace(37, 40, "...");
                         }
 
                         StringBuilder name = new StringBuilder(Objects.requireNonNull(task.getResult().get("Name")).toString());
-                        if (name.length() > 20){
-                            name.replace(17, 20, "...");
+                        if (name.length() > 40){
+                            name.replace(37, 40, "...");
                         }
 
                         listener.OnProfileLoaded(name.toString(), email.toString());
                     } else{
-                        listener.OnProfileNotLoaded();
+                        Log.i("TAG", Uid);
+                        listener.OnProfileNotLoaded(task.getException());
                     }
                 });
     }

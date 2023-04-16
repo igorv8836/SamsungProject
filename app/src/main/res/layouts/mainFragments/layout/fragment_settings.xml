@@ -19,11 +19,22 @@
         android:background="@drawable/rounded_corners"
         tools:ignore="MissingConstraints">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="@+id/profile"
+            app:layout_constraintEnd_toEndOf="@id/profile"
+            app:layout_constraintTop_toTopOf="@id/profile"
+            app:layout_constraintBottom_toTopOf="@+id/button_profile"/>
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:src="@drawable/profile_image"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="@id/profile"
             app:layout_constraintStart_toStartOf="@id/profile"
             app:layout_constraintTop_toTopOf="@id/profile"
@@ -37,6 +48,7 @@
             android:layout_marginEnd="12dp"
             android:layout_marginTop="8dp"
             android:textSize="22sp"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@id/profile"
             app:layout_constraintEnd_toEndOf="@id/profile"
             app:layout_constraintTop_toBottomOf="@id/imageView"
@@ -52,6 +64,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:textSize="18sp"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@id/profile"
             app:layout_constraintEnd_toEndOf="@id/profile"
             app:layout_constraintTop_toBottomOf="@id/textViewName"

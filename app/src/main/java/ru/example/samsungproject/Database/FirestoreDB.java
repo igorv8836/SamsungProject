@@ -4,15 +4,23 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.security.cert.Extension;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
+import ru.example.samsungproject.interfaces.OnNameSendedListener;
 import ru.example.samsungproject.interfaces.OnProfileLoadedListener;
 import ru.example.samsungproject.supportingClasses.NewsElement;
 import ru.example.samsungproject.interfaces.OnNewsLoadedListener;
@@ -83,4 +91,22 @@ public class FirestoreDB {
                 });
     }
 
+    public void SendNewName(OnNameSendedListener listener, String name){
+        if (name.isEmpty()) {
+            listener.onNameNotSended();
+        }
+        else {
+            CollectionReference collection = firebaseFirestore.collection("users");
+            DocumentReference newDocRef = collection.document(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()));
+            Map<String, Object> data = new HashMap<>();
+            data.put("Name", name);
+
+            newDocRef.update(data).addOnCompleteListener(task -> {
+                if (task.isSuccessful())
+                    listener.onNameSended();
+                else
+                    listener.onNameNotSended();
+            });
+        }
+    }
 }

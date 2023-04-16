@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import ru.example.samsungproject.Database.FirestoreDB;
+import ru.example.samsungproject.interfaces.OnNameSendedListener;
 import ru.example.samsungproject.interfaces.OnNewsLoadedListener;
 import ru.example.samsungproject.interfaces.OnProfileLoadedListener;
 
@@ -24,6 +25,10 @@ public class FirestoreRepository {
 
     public void LoadSimpleProfileFromFirebase(OnProfileLoadedListener listener){
         firestoreDB.LoadProfile(listener, currentUser.getUid());
+    }
+
+    public void SendName(OnNameSendedListener listener, String name){
+        firestoreDB.SendNewName(listener, name);
     }
 }
 

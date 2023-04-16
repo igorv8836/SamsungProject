@@ -1,5 +1,7 @@
 package ru.example.samsungproject.fragments.basic;
 
+import static android.view.View.GONE;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,10 +23,12 @@ public class SettingsFragment extends Fragment {
 
     private FragmentSettingsBinding binding;
     private SettingsFragmentViewModel viewModel;
+    private Bundle bundle;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        bundle = new Bundle();
         viewModel = new ViewModelProvider(this).get(SettingsFragmentViewModel.class);
 
         viewModel.LoadUserData();
@@ -37,39 +41,32 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
 
-        viewModel.Email.observe(getViewLifecycleOwner(), email -> {
-            binding.textViewEmail.setText(email);
+        viewModel.data.observe(getViewLifecycleOwner(), data ->{
+            binding.textViewEmail.setText(data[0]);
+            binding.textViewName.setText(data[1]);
+            bundle.putString("Email", data[0]);
+            bundle.putString("Name", data[1]);
+            binding.progressBar.setVisibility(View.GONE);
+            binding.imageView.setVisibility(View.VISIBLE);
+            binding.textViewName.setVisibility(View.VISIBLE);
+            binding.textViewEmail.setVisibility(View.VISIBLE);
         });
 
-        viewModel.Name.observe(getViewLifecycleOwner(), name -> {
-            binding.textViewName.setText(name);
-        });
+
+        binding.buttonProfile.setOnClickListener(v ->
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        .navigate(R.id.action_profile, bundle));
+        binding.buttonSettings.setOnClickListener(v ->
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        .navigate(R.id.action_small_settings, bundle));
+        binding.buttonAboutApp.setOnClickListener(v ->
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        .navigate(R.id.action_about_app, bundle));
+        binding.buttonFeedback.setOnClickListener(v ->
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        .navigate(R.id.action_feedback, bundle));
 
 
         return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        binding.buttonProfile.setOnClickListener(v ->
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                        .navigate(R.id.action_profile));
-        binding.buttonProfile.setOnClickListener(v ->
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                        .navigate(R.id.action_small_settings));
-        binding.buttonProfile.setOnClickListener(v ->
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                        .navigate(R.id.action_about_app));
-        binding.buttonProfile.setOnClickListener(v ->
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                        .navigate(R.id.action_feedback));
     }
 }

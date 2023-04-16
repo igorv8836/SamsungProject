@@ -114,6 +114,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/save"
@@ -126,7 +127,7 @@
                 android:id="@+id/editTextPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:endIconMode="clear_text"
+                app:endIconMode="password_toggle"
                 android:hint="@string/enter_new_password"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
@@ -140,7 +141,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:inputType="text" />
+                    android:inputType="textPassword" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/editTextPassword_errorText"
@@ -153,6 +154,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/change"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/changepassword"

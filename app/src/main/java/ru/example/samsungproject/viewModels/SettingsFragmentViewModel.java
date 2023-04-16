@@ -5,7 +5,9 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import ru.example.samsungproject.interfaces.OnProfileLoadedListener;
 import ru.example.samsungproject.repositories.FirestoreRepository;
@@ -13,21 +15,18 @@ import ru.example.samsungproject.repositories.FirestoreRepository;
 public class SettingsFragmentViewModel extends ViewModel {
 
     private final FirestoreRepository firestoreRepository;
-    public MutableLiveData<String> Email;
-    public MutableLiveData<String> Name;
+    public MutableLiveData<String[]> data;
 
     public SettingsFragmentViewModel() {
         this.firestoreRepository = new FirestoreRepository();
-        Email = new MutableLiveData<>(null);
-        Name = new MutableLiveData<>(null);
+        data = new MutableLiveData<>();
     }
 
     public void LoadUserData(){
         firestoreRepository.LoadSimpleProfileFromFirebase(new OnProfileLoadedListener() {
             @Override
             public void OnProfileLoaded(String name, String email) {
-                Email.setValue(email);
-                Name.setValue(name);
+                data.setValue(new String[]{email, name});
             }
 
             @Override

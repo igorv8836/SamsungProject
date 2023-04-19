@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,29 +31,50 @@ public class ProfileFragment extends Fragment{
         viewModel.startFragment(getArguments());
         progressDialog = new ProgressDialog(requireActivity());
 
-        viewModel.data.observe(getViewLifecycleOwner(), data ->{
+        viewModel.profileData.observe(getViewLifecycleOwner(), data ->{
             binding.textViewEmail.setText(data[0]);
             binding.editTextNicknameInputText.setText(data[1]);
             binding.textViewName.setText(data[1]);
                 });
+
         viewModel.loadedCheck.observe(getViewLifecycleOwner(), q -> {
             Toast.makeText(requireActivity(), "Дождитесь загрузки данных", Toast.LENGTH_SHORT).show();
         });
 
         binding.save.setOnClickListener(l ->{
-            viewModel.setNewName(binding.editTextNicknameInputText.getText().toString());
             progressDialog.setMessage("Загрузка");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
+            viewModel.setNewName(binding.editTextNicknameInputText.getText().toString());
         });
 
         viewModel.sendedName.observe(getViewLifecycleOwner(), d -> {
+            if (d)
+                Toast.makeText(requireActivity(), "Имя поменяется после перезапуска", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(requireActivity(), "Имя не поменялось, ошибка", Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
-            Toast.makeText(requireActivity(), "Имя поменяется после перезапуска", Toast.LENGTH_SHORT).show();
         });
-        viewModel.notSendedName.observe(getViewLifecycleOwner(), d -> {
-            Toast.makeText(requireActivity(), "Имя не поменялось, ошибка", Toast.LENGTH_SHORT).show();
+
+        binding.change.setOnClickListener(view -> {
+            progressDialog.setMessage("Загрузка");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.show();
+            viewModel.setNewPassword(binding.editTextPasswordInputText.getText().toString());
+        });
+
+        viewModel.sendedPassword.observe(getViewLifecycleOwner(), d -> {
             progressDialog.dismiss();
+            if (d)
+                Toast.makeText(requireActivity(), "Пароль поменялся успешно", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(requireActivity(), "Пароль не поменялся, возникла ошибка", Toast.LENGTH_SHORT).show();
+        });
+
+        viewModel.passwordError.observe(getViewLifecycleOwner(), t -> {
+            Toast.makeText(requireActivity(), t, Toast.LENGTH_SHORT).show();
+            DialogFragment dialogFragment = new ReauthenticationFragment();
+            dialogFragment.show(getChildFragmentManager(), "reauth");
         });
 
         return binding.getRoot();

@@ -39,12 +39,10 @@ public class NewsFragment extends Fragment {
 
         viewModel.news.observe(getViewLifecycleOwner(), news -> {
             Log.w("TAG", news.toString());
-            if (!news.isEmpty()) {
-                binding.progressBar.setVisibility(View.GONE);
-                newsAdapter = new NewsAdapter(getActivity(), news);
-                binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-                binding.recyclerView.setAdapter(newsAdapter);
-            }
+            binding.progressBar.setVisibility(View.GONE);
+            newsAdapter = new NewsAdapter(getActivity(), news);
+            binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+            binding.recyclerView.setAdapter(newsAdapter);
         });
         return binding.getRoot();
     }

@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseUser;
 import ru.example.samsungproject.Database.FirestoreDB;
 import ru.example.samsungproject.interfaces.OnNameSendedListener;
 import ru.example.samsungproject.interfaces.OnNewsLoadedListener;
+import ru.example.samsungproject.interfaces.OnPasswordChangedListener;
 import ru.example.samsungproject.interfaces.OnProfileLoadedListener;
 
 public class FirestoreRepository {

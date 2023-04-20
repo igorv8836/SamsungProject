@@ -13,10 +13,16 @@ public class FirebaseUserAccount {
 
     private final FirebaseAuth mAuth;
     private final FirebaseUser currentUser;
-
-    public FirebaseUserAccount() {
+    private static FirebaseUserAccount instance;
+    private FirebaseUserAccount() {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+    }
+
+    public static synchronized FirebaseUserAccount getInstance(){
+        if (instance == null)
+            instance = new FirebaseUserAccount();
+        return instance;
     }
 
     public void ChangePassword(OnPasswordChangedListener listener, String password){
@@ -43,5 +49,9 @@ public class FirebaseUserAccount {
                     else
                         listener.OnNotReauthenticated(task.getException());
                 });
+    }
+
+    public void SignOut(){
+        mAuth.signOut();
     }
 }

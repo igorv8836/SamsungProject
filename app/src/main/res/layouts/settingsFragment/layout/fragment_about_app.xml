@@ -7,9 +7,39 @@
     android:layout_height="match_parent"
     tools:context=".fragments.fragmentsOfSettings.AboutAppFragment">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_corners"
+        android:layout_margin="24dp"
+        android:padding="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:layout_marginBottom="12dp"
+            android:layout_gravity="center"
+            android:text="@string/rapidity"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/version_app"
+            android:layout_gravity="start"
+            android:textSize="22sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_app"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

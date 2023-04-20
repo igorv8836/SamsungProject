@@ -2,6 +2,7 @@ package ru.example.samsungproject.fragments.basic;
 
 import static android.view.View.GONE;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 
 
 import ru.example.samsungproject.R;
+import ru.example.samsungproject.activities.authentication.AuthActivity;
 import ru.example.samsungproject.databinding.FragmentSettingsBinding;
 import ru.example.samsungproject.viewModels.SettingsFragmentViewModel;
 
@@ -66,6 +68,10 @@ public class SettingsFragment extends Fragment {
                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                         .navigate(R.id.action_feedback, bundle));
 
+        binding.buttonSingOut.setOnClickListener(t -> {
+            viewModel.SignOut();
+            startActivity(new Intent(requireActivity(), AuthActivity.class));
+        });
 
         return binding.getRoot();
     }

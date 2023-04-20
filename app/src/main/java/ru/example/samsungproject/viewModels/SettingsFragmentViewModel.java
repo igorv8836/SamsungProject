@@ -11,6 +11,7 @@ import java.util.Arrays;
 
 import ru.example.samsungproject.interfaces.OnProfileLoadedListener;
 import ru.example.samsungproject.repositories.FirestoreRepository;
+import ru.example.samsungproject.supportingClasses.FirebaseUserAccount;
 
 public class SettingsFragmentViewModel extends ViewModel {
 
@@ -34,5 +35,9 @@ public class SettingsFragmentViewModel extends ViewModel {
                 Log.i("TAG", "имя и фамилия не загружены в настройках");
             }
         });
+    }
+
+    public void SignOut(){
+        FirebaseUserAccount.getInstance().SignOut();
     }
 }

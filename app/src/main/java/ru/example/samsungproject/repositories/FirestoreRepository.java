@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import ru.example.samsungproject.Database.FirestoreDB;
+import ru.example.samsungproject.interfaces.OnFeedbackSendedListener;
 import ru.example.samsungproject.interfaces.OnNameSendedListener;
 import ru.example.samsungproject.interfaces.OnNewsLoadedListener;
 import ru.example.samsungproject.interfaces.OnPasswordChangedListener;
@@ -15,7 +16,7 @@ public class FirestoreRepository {
     private final FirebaseUser currentUser;
 
     public FirestoreRepository() {
-        firestoreDB = new FirestoreDB();
+        firestoreDB = FirestoreDB.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
     }
@@ -30,6 +31,10 @@ public class FirestoreRepository {
 
     public void SendName(OnNameSendedListener listener, String name){
         firestoreDB.SendNewName(listener, name);
+    }
+
+    public void SendFeedback(OnFeedbackSendedListener listener, String topic, String text){
+        firestoreDB.SendFeedback(listener, topic, text, currentUser.getEmail());
     }
 }
 

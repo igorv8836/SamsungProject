@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="enterinaccount">Введите старый пароль</string>
+    <string name="language">Язык</string>
+    <string name="version_app">Версия приложения: 1.0</string>
+    <string name="rapidity">Rapidity</string>
+    <string name="about_app">Это приложение - финальный проект для курса от Samsung в университете МИРЭА. Разрабатывается одним человеком.</string>
+    <string name="topic">Тема обращения</string>
+    <string name="message">Сообщение</string>
+    <string name="send">Отправить</string>
+    <string name="sing_out">Выйти с аккаунта</string>
 </resources>

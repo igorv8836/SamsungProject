@@ -23,4 +23,8 @@
     <string name="save">Сохранить</string>
     <string name="changepassword">Сменить пароль</string>
     <string name="enter_new_password">Введите новый пароль</string>
+
+    <string-array name="languages">
+        <item>Русский</item>
+    </string-array>
 </resources>

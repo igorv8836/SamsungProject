@@ -3,11 +3,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.fragmentsOfSettings.FeedbackFragment">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="24dp"
+        android:padding="24dp"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_corners">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/topic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/topic"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:text="Баг в приложении"
+            android:inputType="textCapSentences"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_of_topic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:hint="@string/message"
+            android:inputType="textMultiLine|textCapSentences"
+            android:lines="8"
+            tools:text="это обращение связано с одним багом, во время входа у меня возникает ошибка с загрузкой новостей, при этом подключение к инетрнету есть, телефон работает отлично, никаких проблем с железом"
+            android:textSize="18sp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/send_feedack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="@string/send"/>
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

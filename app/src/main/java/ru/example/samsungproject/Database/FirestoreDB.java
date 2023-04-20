@@ -20,16 +20,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import ru.example.samsungproject.interfaces.OnFeedbackSendedListener;
 import ru.example.samsungproject.interfaces.OnNameSendedListener;
 import ru.example.samsungproject.interfaces.OnProfileLoadedListener;
 import ru.example.samsungproject.supportingClasses.NewsElement;
 import ru.example.samsungproject.interfaces.OnNewsLoadedListener;
 
 public class FirestoreDB {
-    private final FirebaseFirestore firebaseFirestore;
+    private FirebaseFirestore firebaseFirestore;
+    private static FirestoreDB instance;
 
-    public FirestoreDB() {
-        this.firebaseFirestore = FirebaseFirestore.getInstance();
+    private FirestoreDB(){
+        firebaseFirestore = FirebaseFirestore.getInstance();
+    }
+
+    public static synchronized FirestoreDB getInstance() {
+        if (instance == null) {
+            instance = new FirestoreDB();
+        }
+        return instance;
+
     }
 
     public void LoadNews(OnNewsLoadedListener listener){
@@ -108,5 +118,20 @@ public class FirestoreDB {
                     listener.onNameNotSended();
             });
         }
+    }
+
+    public void SendFeedback(OnFeedbackSendedListener listener, String topic, String text, String email){
+        if (topic.isEmpty() || text.isEmpty()) {
+            listener.onFeedbackNotSended(new NullPointerException());
+            return;
+        }
+        Map<String, String> data = new HashMap<>();
+        data.put("Email", email);
+        data.put("Topic", topic);
+        data.put("Text", text);
+        firebaseFirestore.collection("feedback")
+                .add(data)
+                .addOnSuccessListener(e -> listener.onFeedbackSended())
+                .addOnFailureListener(listener::onFeedbackNotSended);
     }
 }

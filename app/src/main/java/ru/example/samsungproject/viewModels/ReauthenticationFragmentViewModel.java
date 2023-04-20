@@ -9,7 +9,7 @@ import ru.example.samsungproject.supportingClasses.FirebaseUserAccount;
 public class ReauthenticationFragmentViewModel extends ViewModel {
     public MutableLiveData<Boolean> reauthCheck = new MutableLiveData<>();
 
-    FirebaseUserAccount firebaseUserAccount = new FirebaseUserAccount();
+    FirebaseUserAccount firebaseUserAccount = FirebaseUserAccount.getInstance();
     public void ReLogin(String password){
         firebaseUserAccount.Reauthenticate(password, new OnReauthenticatedListener() {
             @Override

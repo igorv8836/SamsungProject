@@ -121,8 +121,7 @@
                 app:icon="@drawable/settings"
                 app:cornerRadius="15dp"
                 android:layout_marginBottom="8dp"
-                app:iconTint="@color/white">
-            </com.google.android.material.button.MaterialButton>
+                app:iconTint="@color/white" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_aboutApp"
@@ -136,8 +135,7 @@
                 app:icon="@drawable/aboutapp"
                 app:cornerRadius="15dp"
                 android:layout_marginBottom="8dp"
-                app:iconTint="@color/white">
-            </com.google.android.material.button.MaterialButton>
+                app:iconTint="@color/white"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_feedback"
@@ -150,9 +148,20 @@
                 android:padding="8dp"
                 app:icon="@drawable/feedback"
                 app:cornerRadius="15dp"
-                app:iconTint="@color/white">
+                android:layout_marginBottom="24dp"
+                app:iconTint="@color/white"/>
 
-            </com.google.android.material.button.MaterialButton>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_sing_out"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sing_out"
+                android:textSize="22sp"
+                android:textAllCaps="false"
+                android:gravity="center"
+                android:padding="8dp"
+                app:cornerRadius="15dp"
+                android:backgroundTint="@color/red"/>
 
         </LinearLayout>
 

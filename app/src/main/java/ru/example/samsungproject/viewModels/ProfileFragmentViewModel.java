@@ -24,7 +24,7 @@ public class ProfileFragmentViewModel extends ViewModel {
     public MutableLiveData<Boolean> sendedPassword = new MutableLiveData<>(); //проверка, поменялся ли пароль на сервере
     public MutableLiveData<String> passwordError = new MutableLiveData<>();
     public FirestoreRepository repository = new FirestoreRepository();
-    public FirebaseUserAccount firebaseUserAccount = new FirebaseUserAccount();
+    public FirebaseUserAccount firebaseUserAccount = FirebaseUserAccount.getInstance();
 
 
 

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/rounded_corners"
+    android:clickable="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:focusable="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@drawable/rounded_corners"
+        android:padding="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/event_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Поход в лес с ночевкой"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:maxLength="60"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/number_people"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Кол-во людей: 4"
+        android:gravity="center"
+        android:maxLength="60"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/event_name"
+        />
+
+    <TextView
+        android:id="@+id/access"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Публичный"
+        android:gravity="center"
+        android:maxLength="60"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/event_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Местоположение: Москва, Юго-западная"
+        android:gravity="left"
+        android:maxLength="60"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/number_people"
+        tools:ignore="RtlHardcoded" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/location">
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="        Приглашаем всех желающих на незабываемый поход в лес с ночевкой! Вас ждут красивые виды, свежий воздух и ночь под звездами.
+
+        \n      Маршрут проходит по живописным тропам, где вы сможете насладиться красотой природы и отдохнуть от городской суеты. Ночью мы построим костер, испечем маршмеллоу и проведем время в дружеской атмосфере.
+        \nДата: [указать дату]
+        \nМесто сбора: [указать место сбора]
+        \nПродолжительность: 2 дня, 1 ночь
+        \nСтоимость: [указать стоимость]
+
+        \nНе пропустите этот шанс на приключение в лесу!"
+                android:gravity="left"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/details"
+                tools:ignore="RtlHardcoded" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_list_people"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/description"
+                android:text="Показать участников"
+                android:layout_marginTop="8dp"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_list_tasks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/button_list_people"
+                android:layout_marginTop="8dp"
+                android:text="Показать все задания"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/button_list_tasks"
+                android:layout_marginTop="8dp"
+                android:text="Управление мероприятием" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

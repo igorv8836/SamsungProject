@@ -9,4 +9,6 @@
     <string name="message">Сообщение</string>
     <string name="send">Отправить</string>
     <string name="sing_out">Выйти с аккаунта</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

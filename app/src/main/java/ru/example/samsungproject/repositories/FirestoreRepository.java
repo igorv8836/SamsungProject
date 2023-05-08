@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import ru.example.samsungproject.Database.FirestoreDB;
+import ru.example.samsungproject.interfaces.OnEventsListener;
 import ru.example.samsungproject.interfaces.OnFeedbackSendedListener;
 import ru.example.samsungproject.interfaces.OnNameSendedListener;
 import ru.example.samsungproject.interfaces.OnNewsLoadedListener;
@@ -36,5 +37,6 @@ public class FirestoreRepository {
     public void SendFeedback(OnFeedbackSendedListener listener, String topic, String text){
         firestoreDB.SendFeedback(listener, topic, text, currentUser.getEmail());
     }
+
 }
 

@@ -1,11 +1,14 @@
 package ru.example.samsungproject.Database;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import ru.example.samsungproject.interfaces.OnEventsListener;
+import ru.example.samsungproject.interfaces.OnUserAddedListener;
 
 public class FirestoreEventsDB {
     private FirebaseFirestore firebaseFirestore;
@@ -55,6 +58,18 @@ public class FirestoreEventsDB {
 
     public void DeleteTask(){
 
+    }
+
+    public void SearchUserByEmail(OnUserAddedListener l, String email){
+        firebaseFirestore.collection("users").whereEqualTo("Email", email).get()
+                .addOnSuccessListener(task -> {
+                    if (!(task.isEmpty()))
+                        Log.i("TAG", "поле существует");
+                    else
+                        Log.i("TAG", "поле не существует");
+                }).addOnFailureListener(task -> {
+                    Log.i("TAG", task.getMessage());
+                });
     }
 
 }

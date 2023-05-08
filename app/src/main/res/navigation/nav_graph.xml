@@ -36,6 +36,11 @@
         app:destination="@id/feedbackFragment"/>
 
 
+    <action
+        android:id="@+id/action_edit_event"
+        app:destination="@+id/editEventFragment"/>
+
+
 
     <fragment
         android:id="@+id/calendarFragment"
@@ -85,6 +90,14 @@
         android:name="ru.example.samsungproject.fragments.fragmentsOfSettings.ProfileFragment"
         android:label="ProfileFragment"
         tools:layout="@layout/fragment_profile"/>
+
+
+
+    <fragment
+        android:id="@+id/editEventFragment"
+        android:name="ru.example.samsungproject.fragments.fragmentsOfMyEvents.EditEventFragment"
+        android:label="editEventFragment"
+        tools:layout="@layout/fragment_edit_event"/>
 
 
 </navigation>

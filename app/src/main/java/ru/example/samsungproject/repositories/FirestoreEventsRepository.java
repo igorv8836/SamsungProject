@@ -2,10 +2,9 @@ package ru.example.samsungproject.repositories;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import ru.example.samsungproject.Database.FirestoreEventsDB;
-import ru.example.samsungproject.interfaces.OnEventsListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
 import ru.example.samsungproject.interfaces.OnUserAddedListener;
 
 public class FirestoreEventsRepository {
@@ -19,7 +18,7 @@ public class FirestoreEventsRepository {
         this.currentUser = mAuth.getCurrentUser();
     }
 
-    public void SearchUserByEmail(OnUserAddedListener listener, String email){
+    public void SearchUserByEmail(OnSearchedUserListener listener, String email){
         firestoreEventsDB.SearchUserByEmail(listener, email);
     }
 }

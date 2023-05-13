@@ -68,7 +68,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     CollectionReference collection = firebaseFirestore.collection("users");
-                    DocumentReference newDocRef = collection.document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
+                    DocumentReference newDocRef = collection.document(
+                            Objects.requireNonNull(Objects.requireNonNull(mAuth.getCurrentUser()).getEmail()));
 
                     Map<String, String> data = new HashMap<>();
                     data.put("Email", email);

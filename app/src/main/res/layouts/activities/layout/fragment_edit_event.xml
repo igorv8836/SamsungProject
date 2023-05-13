@@ -111,6 +111,18 @@
                     android:background="@null"
                     android:inputType="date"/>
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/access"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="start"
+                    android:checked="true"
+                    android:text="Приватность мероприятия"
+                    android:textOff="Off"
+                    android:textOn="On"
+                    app:showText="true"/>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/editTextDate_errorText"
                     android:layout_width="match_parent"

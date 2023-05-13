@@ -6,10 +6,9 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.example.samsungproject.interfaces.OnEventsListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
 import ru.example.samsungproject.interfaces.OnUserAddedListener;
 import ru.example.samsungproject.repositories.FirestoreEventsRepository;
-import ru.example.samsungproject.repositories.FirestoreRepository;
 import ru.example.samsungproject.supportingClasses.User;
 
 public class EditEventFragmentViewModel extends ViewModel {
@@ -18,14 +17,14 @@ public class EditEventFragmentViewModel extends ViewModel {
     FirestoreEventsRepository repository = new FirestoreEventsRepository();
 
     public void addUser(String Email){
-        repository.SearchUserByEmail(new OnUserAddedListener() {
+        repository.SearchUserByEmail(new OnSearchedUserListener() {
             @Override
-            public void OnAddedUser() {
+            public void OnSearchedUser() {
 
             }
 
             @Override
-            public void OnNotAddedUser() {
+            public void OnNotSearchedUser() {
 
             }
         }, Email);

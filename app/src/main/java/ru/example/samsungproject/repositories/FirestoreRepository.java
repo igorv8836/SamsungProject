@@ -25,7 +25,7 @@ public class FirestoreRepository {
     }
 
     public void LoadSimpleProfileFromFirebase(OnProfileLoadedListener listener){
-        firestoreDB.LoadProfile(listener, currentUser.getUid());
+        firestoreDB.LoadProfile(listener, currentUser.getEmail());
     }
 
     public void SendName(OnNameSendedListener listener, String name){

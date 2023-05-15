@@ -2,6 +2,8 @@ package ru.example.samsungproject.Database;
 
 import android.util.Log;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -14,7 +16,7 @@ import ru.example.samsungproject.interfaces.EventsListeners.OnChangedTaskListene
 import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnDeletedTaskListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
-import ru.example.samsungproject.interfaces.OnUserAddedListener;
+import ru.example.samsungproject.supportingClasses.User;
 
 public class FirestoreEventsDB {
     private FirebaseFirestore firebaseFirestore;
@@ -32,7 +34,7 @@ public class FirestoreEventsDB {
 
     }
 
-    public void CreateEvent(OnCreatedEventListener listener, String title, String description, String admin, Boolean access, List<String> users){
+    public void CreateEvent(OnCreatedEventListener listener, String title, String description, String admin, Boolean access, List<User> users){
         if (title.isEmpty() || description.isEmpty()) {
             listener.OnNotCreatedEvent();
             return;
@@ -42,11 +44,13 @@ public class FirestoreEventsDB {
         data.put("Description", description);
         data.put("admin", admin);
         data.put("access", access);
-        data.put("members", users);
-        firebaseFirestore.collection("events")
-                .add(data)
-                .addOnSuccessListener(e -> listener.OnCreatedEvent())
-                .addOnFailureListener(e -> listener.OnNotCreatedEvent());
+        DocumentReference newDoc = firebaseFirestore.collection("events").document();
+        newDoc.set(data);
+        CollectionReference members = newDoc.collection("members");
+        for (User user : users){
+            members.document(user.getEmail()).set(user);
+        }
+        listener.OnCreatedEvent();
     }
 
     public void ChangeEvent(OnChangedEventListener l, String name, String title, String description, Boolean access){
@@ -124,11 +128,15 @@ public class FirestoreEventsDB {
                 });
     }
 
-    public void SearchUserByEmail(OnSearchedUserListener l, String email){
+    public void SearchUserByEmail(OnSearchedUserListener l, String email, boolean isCreator){
+        if (email.isEmpty()) {
+            l.OnNotSearchedUser();
+            return;
+        }
         firebaseFirestore.collection("users").document(email).get()
                 .addOnCompleteListener(task -> {
                     if (task.getResult().exists())
-                        l.OnSearchedUser();
+                        l.OnSearchedUser(task.getResult().get("Name").toString(), isCreator);
                     else
                         l.OnNotSearchedUser();
                 });

@@ -77,15 +77,15 @@ public class FirestoreDB {
                 });
     }
 
-    public void LoadProfile(OnProfileLoadedListener listener, String Uid){
+    public void LoadProfile(OnProfileLoadedListener listener, String email){
         firebaseFirestore.collection("users")
-                .document(Objects.requireNonNull(Uid))
+                .document(Objects.requireNonNull(email))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult().get("Email") != null && task.getResult().get("Name") != null){
-                        StringBuilder email = new StringBuilder(task.getResult().get("Email").toString());
-                        if (email.length() > 40){
-                            email.replace(37, 40, "...");
+                        StringBuilder email1 = new StringBuilder(email);
+                        if (email1.length() > 40){
+                            email1.replace(37, 40, "...");
                         }
 
                         StringBuilder name = new StringBuilder(Objects.requireNonNull(task.getResult().get("Name")).toString());
@@ -93,9 +93,9 @@ public class FirestoreDB {
                             name.replace(37, 40, "...");
                         }
 
-                        listener.OnProfileLoaded(name.toString(), email.toString());
+                        listener.OnProfileLoaded(name.toString(), email1.toString());
                     } else{
-                        Log.i("TAG", Uid);
+                        Log.i("TAG", email);
                         listener.OnProfileNotLoaded(task.getException());
                     }
                 });

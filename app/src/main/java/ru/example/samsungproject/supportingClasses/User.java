@@ -1,5 +1,7 @@
 package ru.example.samsungproject.supportingClasses;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+
 public class User {
     private String email;
     private String name;
@@ -13,6 +15,14 @@ public class User {
         this.admin = admin;
         this.creator = creator;
         this.isAgreed = isAgreed;
+    }
+
+    public User(DocumentSnapshot user){
+        email = user.getString("email");
+        name = user.getString("name");
+        admin = Boolean.TRUE.equals(user.getBoolean("admin"));
+        creator = Boolean.TRUE.equals(user.getBoolean("creator"));
+        isAgreed = Boolean.TRUE.equals(user.getBoolean("agreed"));
     }
 
     public boolean isCreator() {

@@ -4,8 +4,11 @@ import android.util.Log;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +18,9 @@ import ru.example.samsungproject.interfaces.EventsListeners.OnChangedEventListen
 import ru.example.samsungproject.interfaces.EventsListeners.OnChangedTaskListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnDeletedTaskListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
+import ru.example.samsungproject.supportingClasses.Event;
 import ru.example.samsungproject.supportingClasses.User;
 
 public class FirestoreEventsDB {
@@ -36,7 +41,7 @@ public class FirestoreEventsDB {
 
     public void CreateEvent(OnCreatedEventListener listener, String title, String description, String admin, Boolean access, List<User> users){
         if (title.isEmpty() || description.isEmpty()) {
-            listener.OnNotCreatedEvent();
+            listener.OnNotCreatedEvent("Заполните все поля");
             return;
         }
         Map<String, Object> data = new HashMap<>();
@@ -49,8 +54,16 @@ public class FirestoreEventsDB {
         CollectionReference members = newDoc.collection("members");
         for (User user : users){
             members.document(user.getEmail()).set(user);
+            if (!admin.equals(user.getEmail()))
+                SendInvitation(user.getEmail(), newDoc.getId());
         }
         listener.OnCreatedEvent();
+    }
+
+    public void SendInvitation(String email, String id){
+        firebaseFirestore.collection("users")
+                .document(email)
+                .update("invitations", FieldValue.arrayUnion(id));
     }
 
     public void ChangeEvent(OnChangedEventListener l, String name, String title, String description, Boolean access){
@@ -139,6 +152,19 @@ public class FirestoreEventsDB {
                         l.OnSearchedUser(task.getResult().get("Name").toString(), isCreator);
                     else
                         l.OnNotSearchedUser();
+                });
+    }
+
+    public void loadMyEvents(OnLoadedMyEventsListener l, String email){
+        ArrayList<Event> temp = new ArrayList<>();
+        firebaseFirestore.collection("events").whereEqualTo("admin", email)
+                .get().addOnSuccessListener(t -> {
+                    for (DocumentSnapshot doc : t) {
+                        firebaseFirestore.collection("events").document(doc.getId()).collection("members").get().addOnCompleteListener(d -> {
+                            temp.add(new Event(doc, d.getResult().getDocuments()));
+                        });
+                    }
+                    l.onLoadedMyEvents(temp);
                 });
     }
 

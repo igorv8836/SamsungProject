@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import ru.example.samsungproject.Database.FirestoreEventsDB;
 import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
 import ru.example.samsungproject.interfaces.OnUserAddedListener;
 import ru.example.samsungproject.supportingClasses.User;
@@ -40,5 +41,9 @@ public class FirestoreEventsRepository {
 
     public void CreateNewEvent(OnCreatedEventListener l, String Title, String Description, String Date, List<User> users, Boolean access){
         firestoreEventsDB.CreateEvent(l, Title, Description, currentUser.getEmail(), access, users);
+    }
+
+    public void loadMyEvents(OnLoadedMyEventsListener l){
+        firestoreEventsDB.loadMyEvents(l, currentUser.getEmail());
     }
 }

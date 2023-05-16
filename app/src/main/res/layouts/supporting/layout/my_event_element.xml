@@ -116,7 +116,7 @@
                 />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_"
+                android:id="@+id/button_manage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"

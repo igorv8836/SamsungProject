@@ -27,6 +27,21 @@
             android:layout_height="match_parent">
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_invitations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Приглашения"
+                tools:ignore="MissingConstraints" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewInvitations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_my_events"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -34,17 +49,20 @@
                 tools:ignore="MissingConstraints" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewMyEvents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:listitem="@layout/my_event_element" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_other_events"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Другие мероприятия"
                 tools:ignore="MissingConstraints" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewOtherEvents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:listitem="@layout/my_event_element"/>

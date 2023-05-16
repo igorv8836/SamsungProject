@@ -3,6 +3,7 @@ package ru.example.samsungproject.fragments.fragmentsOfMyEvents;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -52,6 +53,11 @@ public class EditEventFragment extends Fragment {
                     binding.access.getShowText());
         });
 
+        viewModel.eventIsCreated.observe(getViewLifecycleOwner(), t -> {
+            if (t)
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        .navigate(R.id.myEventsFragment);
+        });
 
         return binding.getRoot();
     }

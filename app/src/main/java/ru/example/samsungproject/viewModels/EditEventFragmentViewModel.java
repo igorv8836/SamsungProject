@@ -10,16 +10,19 @@ import java.util.List;
 import java.util.Objects;
 
 import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnUserStatusClickListener;
 import ru.example.samsungproject.interfaces.OnUserAddedListener;
 import ru.example.samsungproject.repositories.FirestoreEventsRepository;
+import ru.example.samsungproject.supportingClasses.Event;
 import ru.example.samsungproject.supportingClasses.User;
 
 public class EditEventFragmentViewModel extends ViewModel implements OnUserStatusClickListener {
 
     public MutableLiveData<ArrayList<User>> users = new MutableLiveData<>(new ArrayList<>());
     public MutableLiveData<String> ToastText = new MutableLiveData<>();
+    public MutableLiveData<Boolean> eventIsCreated = new MutableLiveData<>();
     FirestoreEventsRepository repository = new FirestoreEventsRepository();
 
     public void addUser(String Email){
@@ -29,10 +32,11 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
                 if (!(isCreator))
                     ToastText.setValue("Пользователь успешно добавлен");
                 ArrayList<User> temp = users.getValue();
-                if (temp != null) {
-                    temp.add(new User(Email, name, isCreator, isCreator, isCreator));
-                    users.setValue(temp);
+                if (temp == null) {
+                    temp = new ArrayList<>();
                 }
+                temp.add(new User(Email, name, isCreator, isCreator, isCreator));
+                users.setValue(temp);
             }
 
             @Override
@@ -55,17 +59,16 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
         repository.CreateNewEvent(new OnCreatedEventListener() {
             @Override
             public void OnCreatedEvent() {
-
+                eventIsCreated.setValue(true);
             }
 
             @Override
-            public void OnNotCreatedEvent() {
-
+            public void OnNotCreatedEvent(String message) {
+                ToastText.setValue(message);
+                eventIsCreated.setValue(false);
             }
         }, Title, Description, Date, users, access);
     }
-
-
 
     @Override
     public void onClickUp(User user) {

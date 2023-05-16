@@ -19,6 +19,7 @@ import ru.example.samsungproject.interfaces.EventsListeners.OnChangedTaskListene
 import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnDeletedTaskListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedOtherEventsListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
 import ru.example.samsungproject.supportingClasses.Event;
 import ru.example.samsungproject.supportingClasses.User;
@@ -166,6 +167,27 @@ public class FirestoreEventsDB {
                     }
                     l.onLoadedMyEvents(temp);
                 });
+    }
+
+    public void loadOtherEvents(OnLoadedOtherEventsListener l, String email){
+        ArrayList<Event> events = new ArrayList<>();
+
+        firebaseFirestore.collection("users").document(email).get().addOnCompleteListener(t -> {
+            if (t.isSuccessful()){
+                List<Object> temp = (List<Object>) t.getResult().get("events");
+                for (Object s: temp) {
+                    firebaseFirestore.collection("events").document(s.toString()).get().addOnCompleteListener(d -> {
+                        if (d.isSuccessful()){
+                            events.add(new Event(
+                                    d.getResult(),
+                                    d.getResult().getReference().collection("members").get().getResult().getDocuments()))
+                        } else
+                            l.onNotLoadedOtherEvents();
+                    });
+                }
+            } else
+                l.onNotLoadedOtherEvents();
+        });
     }
 
 }

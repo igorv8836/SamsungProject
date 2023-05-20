@@ -3,7 +3,7 @@ package ru.example.samsungproject.viewModels;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import ru.example.samsungproject.interfaces.OnReauthenticatedListener;
+import ru.example.samsungproject.interfaces.UserListener.OnReauthenticatedListener;
 import ru.example.samsungproject.supportingClasses.FirebaseUserAccount;
 
 public class ReauthenticationFragmentViewModel extends ViewModel {

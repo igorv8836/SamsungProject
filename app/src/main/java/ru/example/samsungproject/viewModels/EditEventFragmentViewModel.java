@@ -1,5 +1,6 @@
 package ru.example.samsungproject.viewModels;
 
+import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnUserStatusClickListener;
@@ -23,6 +25,10 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
     public MutableLiveData<ArrayList<User>> users = new MutableLiveData<>(new ArrayList<>());
     public MutableLiveData<String> ToastText = new MutableLiveData<>();
     public MutableLiveData<Boolean> eventIsCreated = new MutableLiveData<>();
+    public MutableLiveData<String> title = new MutableLiveData<>();
+    public MutableLiveData<String> description = new MutableLiveData<>();
+    public MutableLiveData<String> date = new MutableLiveData<>();
+    public MutableLiveData<Boolean> access = new MutableLiveData<>();
     FirestoreEventsRepository repository = new FirestoreEventsRepository();
 
     public void addUser(String Email){
@@ -68,6 +74,30 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
                 eventIsCreated.setValue(false);
             }
         }, Title, Description, Date, users, access);
+    }
+
+    public void loadFromBundle(Bundle bundle){
+        String id = bundle.getString("id");
+        if (!id.isEmpty()){
+            repository.loadEvent(new OnLoadedEventListener() {
+                @Override
+                public void onLoadedEvent(Event event) {
+                    title.setValue(event.getTitle());
+                    description.setValue(event.getDescription());
+                    access.setValue(event.getAccess());
+                    users.setValue((ArrayList<User>) event.getMembers());
+                }
+
+                @Override
+                public void onNotLoadedEvent(String message) {
+
+                }
+            }, id);
+        }
+    }
+
+    public void update(){
+
     }
 
     @Override

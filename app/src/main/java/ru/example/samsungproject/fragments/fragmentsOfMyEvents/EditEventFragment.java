@@ -28,6 +28,9 @@ public class EditEventFragment extends Fragment {
         binding = FragmentEditEventBinding.inflate(inflater, container, false);
         viewModel = new EditEventFragmentViewModel();
 
+        if (getArguments() != null) {
+            viewModel.loadFromBundle(getArguments());
+        }
         viewModel.addCreatorUser();
 
         binding.buttonAddUser.setOnClickListener(t -> {
@@ -50,13 +53,29 @@ public class EditEventFragment extends Fragment {
                     binding.editTextDescriptionInputText.getText().toString(),
                     binding.editTextDateInputText.getText().toString(),
                     viewModel.users.getValue(),
-                    binding.access.getShowText());
+                    binding.access.isActivated());
         });
 
         viewModel.eventIsCreated.observe(getViewLifecycleOwner(), t -> {
             if (t)
                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                         .navigate(R.id.myEventsFragment);
+        });
+
+        viewModel.title.observe(getViewLifecycleOwner(), t -> {
+            binding.editTextTitleInputText.setText(t);
+        });
+
+        viewModel.description.observe(getViewLifecycleOwner(), t -> {
+            binding.editTextDescriptionInputText.setText(t);
+        });
+
+        viewModel.date.observe(getViewLifecycleOwner(), t -> {
+            binding.editTextDateInputText.setText(t);
+        });
+
+        viewModel.access.observe(getViewLifecycleOwner(), t -> {
+            binding.access.setChecked(t);
         });
 
         return binding.getRoot();

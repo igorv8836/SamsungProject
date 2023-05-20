@@ -36,6 +36,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewInvitations"
+                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:listitem="" />
@@ -52,6 +53,7 @@
                 android:id="@+id/recyclerViewMyEvents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 tools:listitem="@layout/my_event_element" />
 
             <com.google.android.material.button.MaterialButton
@@ -63,6 +65,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewOtherEvents"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:listitem="@layout/my_event_element"/>

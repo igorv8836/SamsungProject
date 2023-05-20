@@ -1,15 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_400"
+    android:orientation="vertical"
     tools:context=".fragments.basic.SearchEventsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        app:endIconMode="clear_text"
+        android:hint="Введите название мероприятия"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        app:boxBackgroundColor="@null">
 
-</FrameLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextTitle_inputText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:inputType="text"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editTextTitle_errorText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:helperText="Error"
+            app:errorEnabled="true"
+            android:visibility="invisible"
+            android:textColor="@color/red"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_search"
+        android:layout_margin="16dp"
+        android:text="Поиск"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_width="match_parent"
+        tools:listitem="@layout/search_event_element"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

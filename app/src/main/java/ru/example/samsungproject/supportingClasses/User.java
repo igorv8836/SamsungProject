@@ -1,13 +1,23 @@
 package ru.example.samsungproject.supportingClasses;
 
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.PropertyName;
 
 public class User {
+    @PropertyName("email")
     private String email;
+    @PropertyName("name")
     private String name;
+    @PropertyName("creator")
     private boolean creator;
+    @PropertyName("admin")
     private boolean admin;
+    @PropertyName("agreed")
     private boolean isAgreed;
+
+    public User(){
+
+    }
 
     public User(String email, String name, boolean admin, boolean creator, boolean isAgreed) {
         this.email = email;
@@ -17,13 +27,13 @@ public class User {
         this.isAgreed = isAgreed;
     }
 
-    public User(DocumentSnapshot user){
-        email = user.getString("email");
-        name = user.getString("name");
-        admin = Boolean.TRUE.equals(user.getBoolean("admin"));
-        creator = Boolean.TRUE.equals(user.getBoolean("creator"));
-        isAgreed = Boolean.TRUE.equals(user.getBoolean("agreed"));
-    }
+//    public User(DocumentSnapshot user){
+//        email = user.getString("email");
+//        name = user.getString("name");
+//        admin = Boolean.TRUE.equals(user.getBoolean("admin"));
+//        creator = Boolean.TRUE.equals(user.getBoolean("creator"));
+//        isAgreed = Boolean.TRUE.equals(user.getBoolean("agreed"));
+//    }
 
     public boolean isCreator() {
         return creator;

@@ -2,17 +2,14 @@ package ru.example.samsungproject.viewModels;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 
-import ru.example.samsungproject.fragments.fragmentsOfSettings.ProfileFragment;
-import ru.example.samsungproject.interfaces.OnNameSendedListener;
-import ru.example.samsungproject.interfaces.OnPasswordChangedListener;
+import ru.example.samsungproject.interfaces.UserListener.OnNameSendedListener;
+import ru.example.samsungproject.interfaces.UserListener.OnPasswordChangedListener;
 import ru.example.samsungproject.repositories.FirestoreRepository;
 import ru.example.samsungproject.supportingClasses.FirebaseUserAccount;
 

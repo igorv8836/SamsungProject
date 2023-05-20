@@ -1,10 +1,7 @@
 package ru.example.samsungproject.Database;
 
-import android.util.Log;
-
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -12,16 +9,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import ru.example.samsungproject.interfaces.EventsListeners.OnAddedTaskListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnChangedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnChangedTaskListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnDeletedTaskListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsListener;
-import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedOtherEventsListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
+import ru.example.samsungproject.interfaces.UserListener.OnInvitationsLoadedListener;
 import ru.example.samsungproject.supportingClasses.Event;
+import ru.example.samsungproject.supportingClasses.Invitation;
 import ru.example.samsungproject.supportingClasses.User;
 
 public class FirestoreEventsDB {
@@ -45,13 +46,24 @@ public class FirestoreEventsDB {
             listener.OnNotCreatedEvent("Заполните все поля");
             return;
         }
+
+        List<String> emails = new ArrayList<>();
+        emails.add(admin);
+//        for (User u : users)
+//            emails.add(u.getEmail());
+
+        DocumentReference newDoc = firebaseFirestore.collection("events").document();
+
         Map<String, Object> data = new HashMap<>();
         data.put("Title", title);
         data.put("Description", description);
         data.put("admin", admin);
         data.put("access", access);
-        DocumentReference newDoc = firebaseFirestore.collection("events").document();
+        data.put("users", emails);
+        data.put("id", newDoc.getId());
+
         newDoc.set(data);
+
         CollectionReference members = newDoc.collection("members");
         for (User user : users){
             members.document(user.getEmail()).set(user);
@@ -149,45 +161,131 @@ public class FirestoreEventsDB {
         }
         firebaseFirestore.collection("users").document(email).get()
                 .addOnCompleteListener(task -> {
-                    if (task.getResult().exists())
-                        l.OnSearchedUser(task.getResult().get("Name").toString(), isCreator);
-                    else
+                    if (task.isSuccessful()) {
+                        if (task.getResult().exists())
+                            l.OnSearchedUser(task.getResult().get("Name").toString(), isCreator);
+                        else
+                            l.OnNotSearchedUser();
+                    } else
                         l.OnNotSearchedUser();
                 });
     }
 
-    public void loadMyEvents(OnLoadedMyEventsListener l, String email){
-        ArrayList<Event> temp = new ArrayList<>();
-        firebaseFirestore.collection("events").whereEqualTo("admin", email)
+    public void loadEvents(OnLoadedMyEventsListener l, String email){
+        firebaseFirestore.collection("events").whereArrayContains("users", email)
                 .get().addOnSuccessListener(t -> {
-                    for (DocumentSnapshot doc : t) {
-                        firebaseFirestore.collection("events").document(doc.getId()).collection("members").get().addOnCompleteListener(d -> {
-                            temp.add(new Event(doc, d.getResult().getDocuments()));
+                    List<Event> temp = t.toObjects(Event.class);
+                    List<Event> myEvents = new ArrayList<>();
+                    List<Event> otherEvents = new ArrayList<>();
+                    int i = 0;
+                    for (Event event : temp){
+                        t.getDocuments().get(i).getReference().collection("members").get().addOnCompleteListener(d -> {
+                            if (d.isSuccessful()) {
+                                event.setMembersFromFirebase(d.getResult());
+                                //System.out.println(123);
+                            } else
+                                l.onNotLoadedMyEvents("Error");
+                            event.setCurrentUserEmail(email);
+                            if (!event.getAdmin().equals(email)){
+                                otherEvents.add(event);
+                            } else {
+                                myEvents.add(event);
+                            }
+                            l.onLoadedMyEvents(myEvents, otherEvents);
                         });
+                        i++;
                     }
-                    l.onLoadedMyEvents(temp);
                 });
     }
 
-    public void loadOtherEvents(OnLoadedOtherEventsListener l, String email){
-        ArrayList<Event> events = new ArrayList<>();
+    public void loadEvent(OnLoadedEventListener l, String id){
+        firebaseFirestore.collection("events").document(id).get().addOnCompleteListener(t -> {
+            Event event = t.getResult().toObject(Event.class);
+            firebaseFirestore.collection("events").document(id).collection("members").get().addOnCompleteListener(d -> {
+                event.setMembersFromFirebase(d.getResult());
+                l.onLoadedEvent(event);
+            });
+        });
+    }
 
+    public void loadInvitation(OnInvitationsLoadedListener l, String email){
+        ArrayList<Invitation> invitations = new ArrayList<>();
         firebaseFirestore.collection("users").document(email).get().addOnCompleteListener(t -> {
             if (t.isSuccessful()){
-                List<Object> temp = (List<Object>) t.getResult().get("events");
-                for (Object s: temp) {
-                    firebaseFirestore.collection("events").document(s.toString()).get().addOnCompleteListener(d -> {
+                ArrayList<String> invitation = (ArrayList<String>) t.getResult().get("invitations");
+                if (invitation == null) {
+                    l.OnLoaded(invitations);
+                    return;
+                }
+                for (String i : invitation){
+                    firebaseFirestore.collection("events").document(i).get().addOnCompleteListener(d -> {
+                        String sender = d.getResult().getString("admin");
+                        String name = d.getResult().getString("Title");
+                        int count = ((ArrayList<String>) (d.getResult().get("users"))).size();
                         if (d.isSuccessful()){
-                            events.add(new Event(
-                                    d.getResult(),
-                                    d.getResult().getReference().collection("members").get().getResult().getDocuments()))
+                            invitations.add(new Invitation(count, name, sender, d.getResult().getId()));
                         } else
-                            l.onNotLoadedOtherEvents();
+                            l.OnNotLoaded(d.getException().toString());
+                        l.OnLoaded(invitations);
                     });
                 }
-            } else
-                l.onNotLoadedOtherEvents();
+            } else {
+                l.OnNotLoaded(t.getException().toString());
+            }
         });
+    }
+
+    public void invitationAgree(String id, String email){
+        firebaseFirestore.collection("events").document(id).update("users", FieldValue.arrayUnion(email));
+        firebaseFirestore.collection("events").document(id).collection("members").document(email).update("agreed", true);
+        firebaseFirestore.collection("users").document(email).get().addOnCompleteListener(t -> {
+            if (t.isSuccessful()){
+                List<String> temp = (List<String>) t.getResult().get("invitations");
+                temp.remove(id);
+                firebaseFirestore.collection("users").document(email).update("invitations", temp);
+            }
+        });
+    }
+
+    public void invitationDisagree(String id, String email){
+        firebaseFirestore.collection("users").document(email).get().addOnCompleteListener(t -> {
+            if (t.isSuccessful()){
+                List<String> temp = (List<String>) t.getResult().get("invitations");
+                temp.remove(id);
+                firebaseFirestore.collection("users").document(email).update("invitations", temp);
+            }
+        });
+    }
+
+    public void searchEvents(OnSearchedEventListener l, String name, String currentEmail){
+        firebaseFirestore.collection("events").
+                whereGreaterThanOrEqualTo("Title", name).whereLessThan("Title", name + "\uf8ff").get().addOnCompleteListener(t -> {
+                    if (t.isSuccessful()){
+                        List<Event> temp = t.getResult().toObjects(Event.class);
+                        List<Event> search_event = new ArrayList<>();
+                        for (Event event : temp){
+                            if (!event.getUsers().contains(currentEmail))
+                                search_event.add(event);
+                        }
+                        l.onSearchedEvent(search_event);
+                    } else{
+                        l.onNotSearchedEvent(t.getException().toString());
+                    }
+                });
+    }
+
+    public void sendParticipation(String id, String email){
+        //List<String> users;
+
+        firebaseFirestore.collection("events").document(id).update("participations", FieldValue.arrayUnion(email));
+
+//        firebaseFirestore.collection("events").document(id).get().addOnSuccessListener(t -> {
+//            List<String> users = (List<String>) t.get("participations");
+//            if (!users.isEmpty()){
+//                firebaseFirestore.collection("events").document(id).update("participations", FieldValue.arrayUnion(email));
+//            } else
+//                firebaseFirestore.collection("events").document(id).set("participations", FieldValue.arrayUnion(users));
+//        });
     }
 
 }

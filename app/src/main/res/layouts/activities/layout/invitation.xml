@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"/>
 
     <ImageView
-        android:id="@+id/yes"
+        android:id="@+id/button_yes"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
@@ -38,17 +38,17 @@
         android:clickable="true"
         app:layout_constraintTop_toBottomOf="@id/sender_email"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/no"
+        app:layout_constraintEnd_toStartOf="@id/button_no"
         android:focusable="true" />
 
     <ImageView
-        android:id="@+id/no"
+        android:id="@+id/button_no"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/baseline_cancel_24"
         app:layout_constraintTop_toBottomOf="@id/sender_email"
-        app:layout_constraintStart_toEndOf="@id/yes"
+        app:layout_constraintStart_toEndOf="@id/button_yes"
         android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         android:focusable="true" />

@@ -2,8 +2,7 @@ package ru.example.samsungproject.viewModels;
 
 import androidx.lifecycle.MutableLiveData;
 
-import ru.example.samsungproject.Database.FirestoreDB;
-import ru.example.samsungproject.interfaces.OnFeedbackSendedListener;
+import ru.example.samsungproject.interfaces.UserListener.OnFeedbackSendedListener;
 import ru.example.samsungproject.repositories.FirestoreRepository;
 
 public class FeedbackFragmentViewModel {

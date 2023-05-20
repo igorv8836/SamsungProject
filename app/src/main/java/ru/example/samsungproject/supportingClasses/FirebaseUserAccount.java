@@ -1,13 +1,12 @@
 package ru.example.samsungproject.supportingClasses;
 
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import ru.example.samsungproject.interfaces.OnPasswordChangedListener;
-import ru.example.samsungproject.interfaces.OnReauthenticatedListener;
+import ru.example.samsungproject.interfaces.UserListener.OnPasswordChangedListener;
+import ru.example.samsungproject.interfaces.UserListener.OnReauthenticatedListener;
 
 public class FirebaseUserAccount {
 

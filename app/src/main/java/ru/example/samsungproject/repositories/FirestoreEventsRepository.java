@@ -9,9 +9,12 @@ import java.util.Objects;
 
 import ru.example.samsungproject.Database.FirestoreEventsDB;
 import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
 import ru.example.samsungproject.interfaces.OnUserAddedListener;
+import ru.example.samsungproject.interfaces.UserListener.OnInvitationsLoadedListener;
 import ru.example.samsungproject.supportingClasses.User;
 
 public class FirestoreEventsRepository {
@@ -43,7 +46,31 @@ public class FirestoreEventsRepository {
         firestoreEventsDB.CreateEvent(l, Title, Description, currentUser.getEmail(), access, users);
     }
 
-    public void loadMyEvents(OnLoadedMyEventsListener l){
-        firestoreEventsDB.loadMyEvents(l, currentUser.getEmail());
+    public void loadEvents(OnLoadedMyEventsListener l){
+        firestoreEventsDB.loadEvents(l, currentUser.getEmail());
+    }
+
+    public void loadInvitations(OnInvitationsLoadedListener l){
+        firestoreEventsDB.loadInvitation(l, currentUser.getEmail());
+    }
+
+    public void invitationAgree(String id){
+        firestoreEventsDB.invitationAgree(id, currentUser.getEmail());
+    }
+
+    public void invitationDisagree(String id){
+        firestoreEventsDB.invitationDisagree(id, currentUser.getEmail());
+    }
+
+    public void searchEvents(OnSearchedEventListener l, String name){
+        firestoreEventsDB.searchEvents(l, name, currentUser.getEmail());
+    }
+
+    public void sendParticipation(String id){
+        firestoreEventsDB.sendParticipation(id, currentUser.getEmail());
+    }
+
+    public void loadEvent(OnLoadedEventListener l, String id){
+        firestoreEventsDB.loadEvent(l, id);
     }
 }

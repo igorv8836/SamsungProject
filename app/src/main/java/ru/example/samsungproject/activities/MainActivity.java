@@ -81,10 +81,10 @@ public class MainActivity extends AppCompatActivity {
                                 .navigate(R.id.action_menu_3);
                         return true;
 
-                    case R.id.menu_calendar:
-                        Navigation.findNavController(binding.navHostFragment)
-                                .navigate(R.id.action_menu_4);
-                        return true;
+//                    case R.id.menu_calendar:
+//                        Navigation.findNavController(binding.navHostFragment)
+//                                .navigate(R.id.action_menu_4);
+//                        return true;
 
                     case R.id.menu_settings:
                         Navigation.findNavController(binding.navHostFragment)

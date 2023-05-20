@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -16,28 +15,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.example.samsungproject.databinding.MyEventElementBinding;
-import ru.example.samsungproject.interfaces.EventsListeners.OnEventManagedListener;
+import ru.example.samsungproject.databinding.SearchEventElementBinding;
+import ru.example.samsungproject.interfaces.EventsListeners.OnEventJoinedListener;
 import ru.example.samsungproject.supportingClasses.Event;
-import ru.example.samsungproject.supportingClasses.User;
-import ru.example.samsungproject.viewModels.MyEventsFragmentViewModel;
 
-public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
+public class SearchEventAdapter extends RecyclerView.Adapter<SearchEventAdapter.ViewHolder> {
 
     private final List<Event> data;
     private final LayoutInflater localInflater;
+    private OnEventJoinedListener listener;
 
-    private final OnEventManagedListener listener;
-
-    public EventsAdapter(Context context, List<Event> data, MyEventsFragmentViewModel viewModel) {
+    public SearchEventAdapter(Context context, List<Event> data, OnEventJoinedListener listener) {
         this.data = data;
         localInflater = LayoutInflater.from(context);
-        listener = viewModel;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        MyEventElementBinding binding = MyEventElementBinding.inflate(localInflater, parent, false);
+        SearchEventElementBinding binding = SearchEventElementBinding.inflate(localInflater, parent, false);
         return new ViewHolder(binding);
     }
 
@@ -46,24 +43,19 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         Event event = data.get(position);
 
         holder.title.setText(event.getTitle());
-        holder.description.setText(event.getDescription());
-        holder.countPeople.setText("Количество людей: " + event.sizeMembers());
+        holder.countPeople.setText("Количество людей: " + event.getUsers().size());
         holder.geolocation.setVisibility(View.GONE);
-        if (event.getAccess())
+        holder.admin.setText("Создатель: " + event.getAdmin());
+        if (event.getAccess()) {
+            holder.buttonJoin.setText("Присоединиться");
             holder.access.setText("Публичный");
-        else
+        } else {
+            holder.buttonJoin.setText("Подать заявку");
             holder.access.setText("Закрытый");
-
-        for (User user : event.getMembers()){
-            if (user.getEmail().equals(event.getCurrentUserEmail())){
-                if (!user.isAdmin())
-                    holder.buttonManageEvent.setVisibility(View.GONE);
-                break;
-            }
         }
 
-        holder.buttonManageEvent.setOnClickListener(t -> {
-            listener.OnEventManaged(event);
+        holder.buttonJoin.setOnClickListener(t -> {
+            listener.OnJoined(event.getId());
         });
     }
 
@@ -75,28 +67,22 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView title;
-        TextView description;
         TextView countPeople;
         TextView geolocation;
         TextView access;
+        TextView admin;
+        MaterialButton buttonJoin;
 
-        MaterialButton buttonAllTask;
-        MaterialButton buttonManageEvent;
-        MaterialButton buttonAllMembers;
-
-
-        public ViewHolder(MyEventElementBinding binding) {
+        public ViewHolder(SearchEventElementBinding binding) {
             super(binding.getRoot());
 
             title = binding.eventName;
-            description = binding.description;
             countPeople = binding.numberPeople;
             geolocation = binding.location;
             access = binding.access;
+            admin = binding.admin;
 
-            buttonAllTask = binding.buttonListTasks;
-            buttonManageEvent = binding.buttonManage;
-            buttonAllMembers = binding.buttonListPeople;
+            buttonJoin = binding.buttonJoin;
         }
 
 

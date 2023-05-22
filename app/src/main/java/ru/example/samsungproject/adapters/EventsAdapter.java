@@ -7,12 +7,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.example.samsungproject.databinding.MyEventElementBinding;
@@ -21,7 +19,7 @@ import ru.example.samsungproject.supportingClasses.Event;
 import ru.example.samsungproject.supportingClasses.User;
 import ru.example.samsungproject.viewModels.MyEventsFragmentViewModel;
 
-public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
+public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder>  {
 
     private final List<Event> data;
     private final LayoutInflater localInflater;
@@ -64,6 +62,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         holder.buttonManageEvent.setOnClickListener(t -> {
             listener.OnEventManaged(event);
+        });
+
+        holder.buttonAllTask.setOnClickListener(t -> {
+            listener.OnTasksShowed(event.getId());
         });
     }
 

@@ -4,4 +4,5 @@ import ru.example.samsungproject.supportingClasses.Event;
 
 public interface OnEventManagedListener {
     void OnEventManaged(Event event);
+    void OnTasksShowed(String id);
 }

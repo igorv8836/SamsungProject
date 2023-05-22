@@ -39,6 +39,9 @@
     <action
         android:id="@+id/action_edit_event"
         app:destination="@+id/editEventFragment"/>
+    <action
+        android:id="@+id/action_event_tasks"
+        app:destination="@+id/eventTasksFragment"/>
 
 
 
@@ -98,6 +101,11 @@
         android:name="ru.example.samsungproject.fragments.fragmentsOfMyEvents.EditEventFragment"
         android:label="editEventFragment"
         tools:layout="@layout/fragment_edit_event"/>
+    <fragment
+        android:id="@+id/eventTasksFragment"
+        android:name="ru.example.samsungproject.fragments.fragmentsOfMyEvents.TasksFragment"
+        android:label="eventTasksFragment"
+        tools:layout="@layout/fragment_tasks"/>
 
 
 </navigation>

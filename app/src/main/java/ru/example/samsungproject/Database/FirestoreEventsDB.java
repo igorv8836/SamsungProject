@@ -49,8 +49,6 @@ public class FirestoreEventsDB {
 
         List<String> emails = new ArrayList<>();
         emails.add(admin);
-//        for (User u : users)
-//            emails.add(u.getEmail());
 
         DocumentReference newDoc = firebaseFirestore.collection("events").document();
 

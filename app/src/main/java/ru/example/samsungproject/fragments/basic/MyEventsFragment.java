@@ -86,6 +86,12 @@ public class MyEventsFragment extends Fragment {
             }
         });
 
+        viewModel.eventTasks.observe(getViewLifecycleOwner(), t -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("id", t);
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.action_event_tasks, bundle);
+        });
+
 
         return binding.getRoot();
     }

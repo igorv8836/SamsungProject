@@ -24,6 +24,7 @@ public class MyEventsFragmentViewModel extends ViewModel implements OnResponseTo
     public MutableLiveData<Integer> otherEventsRecyclerViewVisibility = new MutableLiveData<>(View.GONE);
     public MutableLiveData<Integer> invitationsRecyclerViewVisibility = new MutableLiveData<>(View.VISIBLE);
     public MutableLiveData<String> manageEvent = new MutableLiveData<>();
+    public MutableLiveData<String> eventTasks = new MutableLiveData<>();
     FirestoreEventsRepository repository = new FirestoreEventsRepository();
 
     public void loadMyEvents(){
@@ -104,5 +105,10 @@ public class MyEventsFragmentViewModel extends ViewModel implements OnResponseTo
     @Override
     public void OnEventManaged(Event event) {
         manageEvent.setValue(event.getId());
+    }
+
+    @Override
+    public void OnTasksShowed(String id) {
+        eventTasks.setValue(id);
     }
 }

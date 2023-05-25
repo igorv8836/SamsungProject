@@ -49,11 +49,14 @@ public class EditEventFragment extends Fragment {
         });
 
         binding.buttonSaveEvent.setOnClickListener(t -> {
-            viewModel.createEvent(binding.editTextTitleInputText.getText().toString(),
-                    binding.editTextDescriptionInputText.getText().toString(),
-                    binding.editTextDateInputText.getText().toString(),
-                    viewModel.users.getValue(),
-                    binding.access.isActivated());
+            if (getArguments() == null)
+                viewModel.createEvent(binding.editTextTitleInputText.getText().toString(),
+                        binding.editTextDescriptionInputText.getText().toString(),
+                        binding.editTextDateInputText.getText().toString(),
+                        viewModel.users.getValue(),
+                        binding.access.isActivated());
+            else
+                viewModel.update();
         });
 
         viewModel.eventIsCreated.observe(getViewLifecycleOwner(), t -> {
@@ -68,10 +71,6 @@ public class EditEventFragment extends Fragment {
 
         viewModel.description.observe(getViewLifecycleOwner(), t -> {
             binding.editTextDescriptionInputText.setText(t);
-        });
-
-        viewModel.date.observe(getViewLifecycleOwner(), t -> {
-            binding.editTextDateInputText.setText(t);
         });
 
         viewModel.access.observe(getViewLifecycleOwner(), t -> {

@@ -8,7 +8,11 @@ import java.util.List;
 import java.util.Objects;
 
 import ru.example.samsungproject.Database.FirestoreEventsDB;
+import ru.example.samsungproject.interfaces.EventsListeners.OnAddedTaskListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnAddedTasksListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnChangedTaskListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnDeletedTaskListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedEventListener;
@@ -46,6 +50,10 @@ public class FirestoreEventsRepository {
         firestoreEventsDB.CreateEvent(l, Title, Description, currentUser.getEmail(), access, users);
     }
 
+    public void updateEvent(String eventId, String Title, String Description, String Date, List<User> users, Boolean access){
+        firestoreEventsDB.updateEvent(eventId, Title, Description, Date, access, users);
+    }
+
     public void loadEvents(OnLoadedMyEventsListener l){
         firestoreEventsDB.loadEvents(l, currentUser.getEmail());
     }
@@ -72,5 +80,42 @@ public class FirestoreEventsRepository {
 
     public void loadEvent(OnLoadedEventListener l, String id){
         firestoreEventsDB.loadEvent(l, id);
+    }
+
+    public void loadTasks(OnAddedTasksListener listener, String eventId){
+        firestoreEventsDB.loadTasks(listener, eventId);
+    }
+
+    public void addTask(OnAddedTaskListener listener,
+                        String eventId,
+                        String title,
+                        String description,
+                        String user, int price){
+        firestoreEventsDB.AddTask(listener, eventId, title, description, currentUser.getEmail(), price);
+    }
+
+    public void changeTask(OnChangedTaskListener listener,
+                           String taskId,
+                           String eventId,
+                           String title,
+                           String description,
+                           int price,
+                           boolean isCompleted,
+                           int percentCompleted){
+        firestoreEventsDB.ChangeTask(
+                listener, taskId, eventId, title,
+                description, price, isCompleted,
+                percentCompleted);
+    }
+
+    public void changeCompleted(String taskId,
+                                String eventId,
+                                int percent,
+                                boolean isCompleted){
+        firestoreEventsDB.changeCompletedTask(eventId, taskId, percent, isCompleted);
+    }
+
+    public void deleteTask(OnDeletedTaskListener listener, String taskId, String eventId){
+        firestoreEventsDB.DeleteTask(listener, eventId, taskId);
     }
 }

@@ -27,8 +27,8 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
     public MutableLiveData<Boolean> eventIsCreated = new MutableLiveData<>();
     public MutableLiveData<String> title = new MutableLiveData<>();
     public MutableLiveData<String> description = new MutableLiveData<>();
-    public MutableLiveData<String> date = new MutableLiveData<>();
     public MutableLiveData<Boolean> access = new MutableLiveData<>();
+    private String eventId;
     FirestoreEventsRepository repository = new FirestoreEventsRepository();
 
     public void addUser(String Email){
@@ -79,6 +79,7 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
     public void loadFromBundle(Bundle bundle){
         String id = bundle.getString("id");
         if (!id.isEmpty()){
+            eventId = id;
             repository.loadEvent(new OnLoadedEventListener() {
                 @Override
                 public void onLoadedEvent(Event event) {
@@ -96,8 +97,8 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
         }
     }
 
-    public void update(){
-
+    public void update(String Title, String Description, String Date, List<User> users, Boolean access){
+        repository.updateEvent(eventId, Title, Description, Date, users, access);
     }
 
     @Override
@@ -123,5 +124,13 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
             temp.remove(user);
         }
         users.setValue(temp);
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 }

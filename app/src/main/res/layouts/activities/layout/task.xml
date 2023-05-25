@@ -10,10 +10,11 @@
 
     <EditText
         android:id="@+id/name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="Купить цветы"
         android:gravity="center"
+        android:enabled="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,7 +22,8 @@
 
     <EditText
         android:id="@+id/description"
-        android:layout_width="wrap_content"
+        android:enabled="false"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="Нужно купить пару букетов цветов для нашего мероприятия"
         android:gravity="center"
@@ -31,7 +33,7 @@
         />
 
     <TextView
-        android:id="@+id/author"
+        android:id="@+id/author_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,16 +42,18 @@
         android:text="Автор: "
         />
 
-    <Spinner
-        android:id="@+id/spinner"
+    <TextView
+        android:id="@+id/author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/author"
+        android:textSize="18sp"
+        tools:text="m@mail.ru"
+        app:layout_constraintStart_toEndOf="@id/author_text"
         app:layout_constraintTop_toBottomOf="@id/description"/>
 
     <TextView
         android:id="@+id/text_price"
-        tools:text="Цена: "
+        android:text="Цена: "
         android:textSize="18sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,12 +63,13 @@
         />
 
     <EditText
-
         android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="number"
+        android:enabled="false"
         app:layout_constraintStart_toEndOf="@id/text_price"
-        app:layout_constraintTop_toBottomOf="@id/spinner"
+        app:layout_constraintTop_toBottomOf="@id/author"
         app:layout_constraintBottom_toTopOf="@id/seek_bar"
         tools:text="2500"/>
 
@@ -73,6 +78,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:min="0"
+        android:max="100"
+        android:progress="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/check_box"
         app:layout_constraintTop_toBottomOf="@id/price"
@@ -88,11 +96,22 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_save_task"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        app:layout_constraintStart_toEndOf="@id/button_delete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/seek_bar"
         android:text="Сохранить"/>
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/button_delete"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/delete"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/seek_bar"
+        app:layout_constraintEnd_toStartOf="@id/button_save_task" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

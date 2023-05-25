@@ -1,5 +1,7 @@
 package ru.example.samsungproject.Database;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
@@ -12,6 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import ru.example.samsungproject.interfaces.EventsListeners.OnAddedTaskListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnAddedTasksListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnChangedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnChangedTaskListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListener;
@@ -23,6 +26,7 @@ import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListen
 import ru.example.samsungproject.interfaces.UserListener.OnInvitationsLoadedListener;
 import ru.example.samsungproject.supportingClasses.Event;
 import ru.example.samsungproject.supportingClasses.Invitation;
+import ru.example.samsungproject.supportingClasses.Task;
 import ru.example.samsungproject.supportingClasses.User;
 
 public class FirestoreEventsDB {
@@ -71,6 +75,32 @@ public class FirestoreEventsDB {
         listener.OnCreatedEvent();
     }
 
+    public void updateEvent(String eventId, String title, String description, Boolean access, List<User> users){
+        if (title.isEmpty() || description.isEmpty()) {
+            return;
+        }
+
+        List<String> emails = new ArrayList<>();
+
+        DocumentReference newDoc = firebaseFirestore.collection("events").document(eventId);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("Title", title);
+        data.put("Description", description);
+        data.put("access", access);
+        data.put("users", emails);
+        data.put("id", newDoc.getId());
+
+        newDoc.update(data);
+
+        CollectionReference members = newDoc.collection("members");
+        for (User user : users){
+            members.document(user.getEmail()).set(user);
+            if (!admin.equals(user.getEmail()))
+                SendInvitation(user.getEmail(), newDoc.getId());
+        }
+    }
+
     public void SendInvitation(String email, String id){
         firebaseFirestore.collection("users")
                 .document(email)
@@ -92,9 +122,9 @@ public class FirestoreEventsDB {
                 });
     }
 
-    public void DeleteEvent(OnDeletedTaskListener l, String name){
+    public void DeleteEvent(OnDeletedTaskListener l, String id){
         firebaseFirestore.collection("events")
-                .document(name)
+                .document(id)
                 .delete().addOnCompleteListener(task -> {
                     if (task.isSuccessful())
                         l.OnDeletedTask();
@@ -103,33 +133,48 @@ public class FirestoreEventsDB {
                 });
     }
 
-    public void AddTask(OnAddedTaskListener l, String eventName, String title, String description, String user){
+    public void AddTask(OnAddedTaskListener l, String eventId, String title, String description, String user, int price){
         Map<String, Object> data = new HashMap<>();
-        data.put("Title", title);
-        data.put("Description", description);
-        data.put("authors", user);
+        data.put("title", title);
+        data.put("description", description);
+        data.put("author", user);
+        data.put("price", price);
+        data.put("isCompleted", false);
+        data.put("percentCompleted", 0);
+        data.put("id", "");
         firebaseFirestore.collection("events")
-                .document(eventName)
+                .document(eventId)
                 .collection("tasks")
                 .add(data)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful())
-                        l.OnAddedTask();
-                    else
+                    if (task.isSuccessful()) {
+                        l.OnAddedTask(task.getResult().getId(), user);
+                        task.getResult().update("id", task.getResult().getId());
+                    }else
                         l.OnNotAddedTask();
                 });
     }
 
-    public void ChangeTask(OnChangedTaskListener l, String eventName, String taskName, String title, String description, String user){
+    public void ChangeTask(OnChangedTaskListener l,
+                           String taskId,
+                           String eventId,
+                           String title,
+                           String description,
+                           int price,
+                           boolean isCompleted,
+                           int percentCompleted
+                           ){
         Map<String, Object> data = new HashMap<>();
-        data.put("Title", title);
-        data.put("Description", description);
-        data.put("authors", user);
+        data.put("title", title);
+        data.put("description", description);
+        data.put("price", price);
+        data.put("isCompleted", isCompleted);
+        data.put("percentCompleted", percentCompleted);
         firebaseFirestore.collection("events")
-                .document(eventName)
+                .document(eventId)
                 .collection("tasks")
-                .document(taskName)
-                .get()
+                .document(taskId)
+                .update(data)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful())
                         l.OnChangedTask();
@@ -138,11 +183,19 @@ public class FirestoreEventsDB {
                 });
     }
 
-    public void DeleteTask(OnDeletedTaskListener l, String eventName, String taskName){
+    public void changeCompletedTask(String eventId, String taskId, int percent, boolean isCompleted){
+        HashMap<String, Object> temp = new HashMap<>();
+        temp.put("percentCompleted", percent);
+        temp.put("isCompleted", isCompleted);
+        firebaseFirestore.collection("events").document(eventId).
+                collection("tasks").document(taskId).update(temp);
+    }
+
+    public void DeleteTask(OnDeletedTaskListener l, String eventId, String taskId){
         firebaseFirestore.collection("events")
-                .document(eventName)
+                .document(eventId)
                 .collection("tasks")
-                .document(taskName)
+                .document(taskId)
                 .delete()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful())
@@ -284,6 +337,26 @@ public class FirestoreEventsDB {
 //            } else
 //                firebaseFirestore.collection("events").document(id).set("participations", FieldValue.arrayUnion(users));
 //        });
+    }
+
+    public void loadTasks(OnAddedTasksListener listener, String eventId){
+        firebaseFirestore.
+                collection("events").
+                document(eventId).collection("tasks").get().
+                addOnCompleteListener(t -> {
+                    if (t.isSuccessful()){
+                        List<Task> data = t.getResult().toObjects(Task.class);
+                        for (Task task : data) {
+                            task.setCompleted(task.getPercentCompleted() == 100);
+                        }
+                        listener.OnAddedTasks(data);
+                    } else {
+                        listener.OnNotAddedTasks();
+                        Log.w("TAG", t.getException());
+                    }
+
+        });
+
     }
 
 }

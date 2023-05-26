@@ -186,8 +186,37 @@
                 android:layout_marginTop="16dp"
                 android:id="@+id/list_of_people"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/text_request"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/user_element"/>
+                android:layout_marginTop="16dp"
+                android:text="Заявки в мероприятия"
+                android:layout_gravity="center"
+                android:textSize="24sp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:id="@+id/list_of_request"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:backgroundTint="@color/red"
+                android:text="Удалить"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -1,6 +1,5 @@
 package ru.example.samsungproject.fragments.basic;
 
-import static android.view.View.GONE;
 
 import android.content.Intent;
 import android.os.Bundle;

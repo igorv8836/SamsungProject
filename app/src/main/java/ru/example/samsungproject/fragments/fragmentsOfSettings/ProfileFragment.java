@@ -11,10 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.security.Provider;
 import java.util.Objects;
 
 import ru.example.samsungproject.databinding.FragmentProfileBinding;
@@ -45,7 +43,7 @@ public class ProfileFragment extends Fragment{
             progressDialog.setMessage("Загрузка");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
-            viewModel.setNewName(binding.editTextNicknameInputText.getText().toString());
+            viewModel.setNewName(Objects.requireNonNull(binding.editTextNicknameInputText.getText()).toString());
         });
 
         viewModel.sendedName.observe(getViewLifecycleOwner(), d -> {
@@ -60,7 +58,7 @@ public class ProfileFragment extends Fragment{
             progressDialog.setMessage("Загрузка");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
-            viewModel.setNewPassword(binding.editTextPasswordInputText.getText().toString());
+            viewModel.setNewPassword(Objects.requireNonNull(binding.editTextPasswordInputText.getText()).toString());
         });
 
         viewModel.sendedPassword.observe(getViewLifecycleOwner(), d -> {

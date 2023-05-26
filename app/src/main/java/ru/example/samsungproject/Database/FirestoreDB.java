@@ -2,9 +2,6 @@ package ru.example.samsungproject.Database;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -14,20 +11,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedEventListener;
 import ru.example.samsungproject.interfaces.UserListener.OnFeedbackSendedListener;
 import ru.example.samsungproject.interfaces.UserListener.OnNameSendedListener;
 import ru.example.samsungproject.interfaces.OnProfileLoadedListener;
-import ru.example.samsungproject.supportingClasses.Event;
 import ru.example.samsungproject.supportingClasses.NewsElement;
 import ru.example.samsungproject.interfaces.OnNewsLoadedListener;
 
 public class FirestoreDB {
-    private FirebaseFirestore firebaseFirestore;
+    private final FirebaseFirestore firebaseFirestore;
     private static FirestoreDB instance;
 
     private FirestoreDB(){
@@ -54,9 +48,9 @@ public class FirestoreDB {
                             && documentSnapshot.get("Date") != null) {
 
                                 list.add(new NewsElement(
-                                        documentSnapshot.get("Title").toString(),
-                                        documentSnapshot.get("Description").toString(),
-                                        documentSnapshot.get("Date").toString()));
+                                        Objects.requireNonNull(documentSnapshot.get("Title")).toString(),
+                                        Objects.requireNonNull(documentSnapshot.get("Description")).toString(),
+                                        Objects.requireNonNull(documentSnapshot.get("Date")).toString()));
                                 Log.w("TAG", documentSnapshot.getId() + " --- " + documentSnapshot.getData());
                             } else{
                                 Log.w("TAG", "документ news, одно поле имеет null");
@@ -68,12 +62,9 @@ public class FirestoreDB {
                         listener.onNewsNotLoaded();
                         Log.w("LoadNewsFromNetwork", "Данные не загрузились");
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        listener.onNewsNotLoaded();
-                        Log.w("TAG", "данные новости не загрузились на телефон");
-                    }
+                }).addOnFailureListener(e -> {
+                    listener.onNewsNotLoaded();
+                    Log.w("TAG", "данные новости не загрузились на телефон");
                 });
     }
 
@@ -107,7 +98,10 @@ public class FirestoreDB {
         }
         else {
             CollectionReference collection = firebaseFirestore.collection("users");
-            DocumentReference newDocRef = collection.document(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()));
+            DocumentReference newDocRef = collection.document(
+                    Objects.requireNonNull(
+                            Objects.requireNonNull(
+                                    FirebaseAuth.getInstance().getCurrentUser()).getEmail()));
             Map<String, Object> data = new HashMap<>();
             data.put("Name", name);
 

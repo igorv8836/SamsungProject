@@ -1,8 +1,8 @@
 package ru.example.samsungproject.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +34,7 @@ public class InvitationsAdapter extends RecyclerView.Adapter<InvitationsAdapter.
         return new InvitationsAdapter.ViewHolder(binding);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull InvitationsAdapter.ViewHolder holder, int position) {
         Invitation invitation = data.get(position);
@@ -42,13 +43,9 @@ public class InvitationsAdapter extends RecyclerView.Adapter<InvitationsAdapter.
         holder.sender.setText("Создатель: " + invitation.getAdminEmail());
         //holder.countMembers.setText("Кол-во участников: " + invitation.getCountMembers());
 
-        holder.button_yes.setOnClickListener(t -> {
-            viewModel.OnUserAgreed(invitation.geteventId());
-        });
+        holder.button_yes.setOnClickListener(t -> viewModel.OnUserAgreed(invitation.geteventId()));
 
-        holder.button_no.setOnClickListener(t -> {
-            viewModel.OnUserDisagreed(invitation.geteventId());
-        });
+        holder.button_no.setOnClickListener(t -> viewModel.OnUserDisagreed(invitation.geteventId()));
     }
 
     @Override

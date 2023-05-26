@@ -2,15 +2,11 @@ package ru.example.samsungproject.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,19 +17,16 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
-import ru.example.samsungproject.R;
 import ru.example.samsungproject.databinding.TaskBinding;
-import ru.example.samsungproject.fragments.fragmentsOfMyEvents.TasksFragment;
 import ru.example.samsungproject.interfaces.EventsListeners.OnTaskButtonListener;
 import ru.example.samsungproject.supportingClasses.Task;
-import ru.example.samsungproject.supportingClasses.User;
 import ru.example.samsungproject.viewModels.TasksFragmentViewModel;
 
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> {
 
     private List<Task> data;
     private final LayoutInflater localInflater;
-    private OnTaskButtonListener listener;
+    private final OnTaskButtonListener listener;
     private boolean changeFromUser = true;
 
     public TasksAdapter(Context context, List<Task> data, TasksFragmentViewModel viewModel) {
@@ -119,40 +112,31 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
             }
         });
 
-        holder.isCompleted.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!changeFromUser)
-                    return;
-                int p = 100;
-                if (isChecked) {
-                    task.setPercentCompleted(p);
-                    holder.percentCompleted.setProgress(100, true);
-                } else {
-                    p = 0;
-                    task.setPercentCompleted(p);
-                    holder.percentCompleted.setProgress(0, true);
-                }
-                listener.changeCompleted(task.getId(), p, isChecked);
-                changeFromUser = true;
+        holder.isCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!changeFromUser)
+                return;
+            int p = 100;
+            if (isChecked) {
+                task.setPercentCompleted(p);
+                holder.percentCompleted.setProgress(100, true);
+            } else {
+                p = 0;
+                task.setPercentCompleted(p);
+                holder.percentCompleted.setProgress(0, true);
             }
+            listener.changeCompleted(task.getId(), p, isChecked);
+            changeFromUser = true;
         });
 
         holder.button_delete.setOnClickListener(t -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(localInflater.getContext());
             builder.setMessage("Вы точно хотите удалить?")
                     .setTitle("Удаление")
-                    .setPositiveButton("Удалить", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            listener.deleteTask(task.getId());
-                            dialog.cancel();
-                        }
+                    .setPositiveButton("Удалить", (dialog, id) -> {
+                        listener.deleteTask(task.getId());
+                        dialog.cancel();
                     })
-                    .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
+                    .setNegativeButton("Отмена", (dialog, id) -> dialog.cancel());
 
             AlertDialog dialog = builder.create();
             dialog.show();

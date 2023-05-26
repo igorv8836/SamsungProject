@@ -10,8 +10,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import java.util.Objects;
 
 import ru.example.samsungproject.databinding.FragmentReauthenticationBinding;
+import ru.example.samsungproject.viewModels.MyEventsFragmentViewModel;
 import ru.example.samsungproject.viewModels.ReauthenticationFragmentViewModel;
 
 public class ReauthenticationFragment extends DialogFragment {
@@ -23,9 +27,10 @@ public class ReauthenticationFragment extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentReauthenticationBinding.inflate(inflater, container, false);
-        viewModel = new ReauthenticationFragmentViewModel();
+        viewModel = new ViewModelProvider(this).get(ReauthenticationFragmentViewModel.class);
 
-        binding.buttonReLogin.setOnClickListener(view -> viewModel.ReLogin(binding.editTextPasswordInputText.getText().toString()));
+        binding.buttonReLogin.setOnClickListener(view ->
+                viewModel.ReLogin(Objects.requireNonNull(binding.editTextPasswordInputText.getText()).toString()));
 
         viewModel.reauthCheck.observe(getViewLifecycleOwner(), d -> {
             if (d)

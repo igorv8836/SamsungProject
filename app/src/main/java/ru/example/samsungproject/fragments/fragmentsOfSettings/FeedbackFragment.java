@@ -10,9 +10,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import java.util.Objects;
 
 import ru.example.samsungproject.databinding.FragmentFeedbackBinding;
 import ru.example.samsungproject.viewModels.FeedbackFragmentViewModel;
+import ru.example.samsungproject.viewModels.MyEventsFragmentViewModel;
 
 public class FeedbackFragment extends Fragment{
     private FragmentFeedbackBinding binding;
@@ -22,7 +26,7 @@ public class FeedbackFragment extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentFeedbackBinding.inflate(inflater, container, false);
-        viewModel = new FeedbackFragmentViewModel();
+        viewModel = new ViewModelProvider(this).get(FeedbackFragmentViewModel.class);
         
         dialog = new ProgressDialog(requireActivity());
 
@@ -31,8 +35,8 @@ public class FeedbackFragment extends Fragment{
             dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             dialog.show();
             viewModel.sendFeedback(
-                    binding.topic.getText().toString(),
-                    binding.textOfTopic.getText().toString());
+                    Objects.requireNonNull(binding.topic.getText()).toString(),
+                    Objects.requireNonNull(binding.textOfTopic.getText()).toString());
         });
         
         viewModel.sendedCheck.observe(getViewLifecycleOwner(), d -> {

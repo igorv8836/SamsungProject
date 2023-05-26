@@ -1,5 +1,6 @@
 package ru.example.samsungproject.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         return new ViewHolder(binding);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Event event = data.get(position);
@@ -60,13 +62,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             }
         }
 
-        holder.buttonManageEvent.setOnClickListener(t -> {
-            listener.OnEventManaged(event);
-        });
+        holder.buttonManageEvent.setOnClickListener(t -> listener.OnEventManaged(event));
 
-        holder.buttonAllTask.setOnClickListener(t -> {
-            listener.OnTasksShowed(event.getId());
-        });
+        holder.buttonAllTask.setOnClickListener(t -> listener.OnTasksShowed(event.getId()));
     }
 
     @Override

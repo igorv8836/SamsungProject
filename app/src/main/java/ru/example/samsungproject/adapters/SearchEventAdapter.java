@@ -1,5 +1,6 @@
 package ru.example.samsungproject.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import ru.example.samsungproject.databinding.MyEventElementBinding;
 import ru.example.samsungproject.databinding.SearchEventElementBinding;
 import ru.example.samsungproject.interfaces.EventsListeners.OnEventJoinedListener;
 import ru.example.samsungproject.supportingClasses.Event;
@@ -23,7 +22,7 @@ public class SearchEventAdapter extends RecyclerView.Adapter<SearchEventAdapter.
 
     private final List<Event> data;
     private final LayoutInflater localInflater;
-    private OnEventJoinedListener listener;
+    private final OnEventJoinedListener listener;
 
     public SearchEventAdapter(Context context, List<Event> data, OnEventJoinedListener listener) {
         this.data = data;
@@ -38,6 +37,7 @@ public class SearchEventAdapter extends RecyclerView.Adapter<SearchEventAdapter.
         return new ViewHolder(binding);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Event event = data.get(position);
@@ -54,9 +54,7 @@ public class SearchEventAdapter extends RecyclerView.Adapter<SearchEventAdapter.
             holder.access.setText("Закрытый");
         }
 
-        holder.buttonJoin.setOnClickListener(t -> {
-            listener.OnJoined(event.getId());
-        });
+        holder.buttonJoin.setOnClickListener(t -> listener.OnJoined(event.getId()));
     }
 
     @Override

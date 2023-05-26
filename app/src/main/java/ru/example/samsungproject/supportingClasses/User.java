@@ -1,6 +1,5 @@
 package ru.example.samsungproject.supportingClasses;
 
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.PropertyName;
 
 public class User {

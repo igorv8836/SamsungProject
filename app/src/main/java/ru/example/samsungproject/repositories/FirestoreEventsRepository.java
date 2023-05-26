@@ -18,7 +18,6 @@ import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsList
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedUsersForEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
-import ru.example.samsungproject.interfaces.OnUserAddedListener;
 import ru.example.samsungproject.interfaces.UserListener.OnInvitationsLoadedListener;
 import ru.example.samsungproject.supportingClasses.User;
 
@@ -57,6 +56,10 @@ public class FirestoreEventsRepository {
 
     public void loadUsersForEvent(OnLoadedUsersForEventListener listener, String eventId){
         firestoreEventsDB.loadUsersForEvent(listener, eventId);
+    }
+
+    public void kickUser(String eventId, String email){
+        firestoreEventsDB.kickUser(eventId, email);
     }
 
     public void loadEvents(OnLoadedMyEventsListener l){

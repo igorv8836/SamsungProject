@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-        if (!PermissionUtils.hasPermissions(MainActivity.this))
-            PermissionUtils.requestPermissions(MainActivity.this, PERMISSION_STORAGE);
+        //if (!PermissionUtils.hasPermissions(MainActivity.this))
+            //PermissionUtils.requestPermissions(MainActivity.this, PERMISSION_STORAGE);
 
         binding.navMenu.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")

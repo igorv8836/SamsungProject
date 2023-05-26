@@ -1,11 +1,12 @@
 package ru.example.samsungproject.viewModels;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import ru.example.samsungproject.interfaces.UserListener.OnFeedbackSendedListener;
 import ru.example.samsungproject.repositories.FirestoreRepository;
 
-public class FeedbackFragmentViewModel {
+public class FeedbackFragmentViewModel extends ViewModel {
 
     public MutableLiveData<Boolean> sendedCheck;
     FirestoreRepository firestoreRepository;

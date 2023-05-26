@@ -1,10 +1,8 @@
 package ru.example.samsungproject.supportingClasses;
 
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.PropertyName;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Event {

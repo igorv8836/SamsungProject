@@ -2,7 +2,6 @@ package ru.example.samsungproject.viewModels;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -13,11 +12,9 @@ import java.util.Objects;
 
 import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedEventListener;
-import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedUsersForEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnUserStatusClickListener;
-import ru.example.samsungproject.interfaces.OnUserAddedListener;
 import ru.example.samsungproject.repositories.FirestoreEventsRepository;
 import ru.example.samsungproject.supportingClasses.Event;
 import ru.example.samsungproject.supportingClasses.User;
@@ -138,6 +135,7 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
         if (user.isAdmin()){
             temp.get(temp.indexOf(user)).setAdmin(false);
         } else {
+            repository.kickUser(eventId, user.getEmail());
             temp.remove(user);
         }
         users.setValue(temp);

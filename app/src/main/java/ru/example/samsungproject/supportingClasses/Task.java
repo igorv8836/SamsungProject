@@ -1,6 +1,5 @@
 package ru.example.samsungproject.supportingClasses;
 
-import java.util.List;
 
 public class Task {
     private String title;

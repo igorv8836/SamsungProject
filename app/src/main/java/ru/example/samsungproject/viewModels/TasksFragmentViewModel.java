@@ -47,7 +47,7 @@ public class TasksFragmentViewModel extends ViewModel implements OnTaskButtonLis
     public void addNewTask(){
         List<Task> temp = data.getValue();
         Task task = new Task("","", "", 0, "", true);
-        temp.add(task);
+        Objects.requireNonNull(temp).add(task);
         repository.addTask(new OnAddedTaskListener() {
             @Override
             public void OnAddedTask(String id, String author) {
@@ -105,7 +105,7 @@ public class TasksFragmentViewModel extends ViewModel implements OnTaskButtonLis
     @Override
     public void changeCompleted(String taskId, int percent, boolean isCompleted) {
         List<Task> list = data.getValue();
-        for (Task task : list){
+        for (Task task : Objects.requireNonNull(list)){
             if (task.getId().equals(taskId)){
                 task.setCompleted(isCompleted);
                 task.setPercentCompleted(percent);
@@ -122,7 +122,7 @@ public class TasksFragmentViewModel extends ViewModel implements OnTaskButtonLis
             @Override
             public void OnDeletedTask() {
                 List<Task> temp = data.getValue();
-                for (Task task: temp)
+                for (Task task: Objects.requireNonNull(temp))
                     if (Objects.equals(task.getId(), taskId)) {
                         temp.remove(task);
                         break;

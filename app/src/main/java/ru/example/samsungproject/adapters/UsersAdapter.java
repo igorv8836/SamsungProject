@@ -2,7 +2,6 @@ package ru.example.samsungproject.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,12 +48,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
         holder.email.setText(item.getEmail());
 
-        holder.imagedown.setOnClickListener(t -> {
-            listener.onClickDown(data.get(position));
-        });
-        holder.imageup.setOnClickListener(t -> {
-            listener.onClickUp(data.get(position));
-        });
+        holder.imagedown.setOnClickListener(t -> listener.onClickDown(data.get(position)));
+        holder.imageup.setOnClickListener(t -> listener.onClickUp(data.get(position)));
     }
 
     @Override

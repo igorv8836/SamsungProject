@@ -15,12 +15,12 @@ import java.util.Objects;
 
 import ru.example.samsungproject.interfaces.EventsListeners.OnAddedTaskListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnAddedTasksListener;
-import ru.example.samsungproject.interfaces.EventsListeners.OnChangedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnChangedTaskListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnDeletedTaskListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedParticipationListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedUsersForEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
@@ -31,7 +31,7 @@ import ru.example.samsungproject.supportingClasses.Task;
 import ru.example.samsungproject.supportingClasses.User;
 
 public class FirestoreEventsDB {
-    private FirebaseFirestore firebaseFirestore;
+    private final FirebaseFirestore firebaseFirestore;
     private static FirestoreEventsDB instance;
 
     private FirestoreEventsDB(){
@@ -104,6 +104,11 @@ public class FirestoreEventsDB {
         }
     }
 
+    public void kickUser(String eventId, String email){
+        firebaseFirestore.collection("events").document(eventId).collection("members")
+                .document(email).delete();
+    }
+
     public void SendInvitation(String email, String id){
         firebaseFirestore.collection("users")
                 .document(email)
@@ -152,7 +157,7 @@ public class FirestoreEventsDB {
         firebaseFirestore.collection("events").document(id).get().addOnCompleteListener(t -> {
             Event event = t.getResult().toObject(Event.class);
             firebaseFirestore.collection("events").document(id).collection("members").get().addOnCompleteListener(d -> {
-                event.setMembersFromFirebase(d.getResult());
+                Objects.requireNonNull(event).setMembersFromFirebase(d.getResult());
                 l.onLoadedEvent(event);
             });
         });
@@ -170,7 +175,7 @@ public class FirestoreEventsDB {
                         }
                         l.onSearchedEvent(search_event);
                     } else{
-                        l.onNotSearchedEvent(t.getException().toString());
+                        l.onNotSearchedEvent(Objects.requireNonNull(t.getException()).toString());
                     }
                 });
     }
@@ -290,7 +295,7 @@ public class FirestoreEventsDB {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (task.getResult().exists())
-                            l.OnSearchedUser(task.getResult().get("Name").toString(), isCreator);
+                            l.OnSearchedUser(Objects.requireNonNull(task.getResult().get("Name")).toString(), isCreator);
                         else
                             l.OnNotSearchedUser();
                     } else
@@ -311,16 +316,16 @@ public class FirestoreEventsDB {
                     firebaseFirestore.collection("events").document(i).get().addOnCompleteListener(d -> {
                         String sender = d.getResult().getString("admin");
                         String name = d.getResult().getString("Title");
-                        int count = ((ArrayList<String>) (d.getResult().get("users"))).size();
+                        int count = ((ArrayList<String>) (Objects.requireNonNull(d.getResult().get("users")))).size();
                         if (d.isSuccessful()){
                             invitations.add(new Invitation(count, name, sender, d.getResult().getId()));
                         } else
-                            l.OnNotLoaded(d.getException().toString());
+                            l.OnNotLoaded(Objects.requireNonNull(d.getException()).toString());
                         l.OnLoaded(invitations);
                     });
                 }
             } else {
-                l.OnNotLoaded(t.getException().toString());
+                l.OnNotLoaded(Objects.requireNonNull(t.getException()).toString());
             }
         });
     }
@@ -331,35 +336,47 @@ public class FirestoreEventsDB {
         firebaseFirestore.collection("users").document(email).get().addOnCompleteListener(t -> {
             if (t.isSuccessful()){
                 List<String> temp = (List<String>) t.getResult().get("invitations");
-                temp.remove(id);
+                Objects.requireNonNull(temp).remove(id);
                 firebaseFirestore.collection("users").document(email).update("invitations", temp);
             }
         });
     }
 
     public void invitationDisagree(String id, String email){
+        firebaseFirestore.collection("events").document(id).collection("members").document(email).delete();
         firebaseFirestore.collection("users").document(email).get().addOnCompleteListener(t -> {
             if (t.isSuccessful()){
                 List<String> temp = (List<String>) t.getResult().get("invitations");
-                temp.remove(id);
+                Objects.requireNonNull(temp).remove(id);
                 firebaseFirestore.collection("users").document(email).update("invitations", temp);
             }
         });
     }
 
     public void sendParticipation(String id, String email){
-        //List<String> users;
-
         firebaseFirestore.collection("events").document(id).update("participations", FieldValue.arrayUnion(email));
 
-//        firebaseFirestore.collection("events").document(id).get().addOnSuccessListener(t -> {
-//            List<String> users = (List<String>) t.get("participations");
-//            if (!users.isEmpty()){
-//                firebaseFirestore.collection("events").document(id).update("participations", FieldValue.arrayUnion(email));
-//            } else
-//                firebaseFirestore.collection("events").document(id).set("participations", FieldValue.arrayUnion(users));
-//        });
+        firebaseFirestore.collection("events").document(id).get().addOnSuccessListener(t -> {
+            List<String> users = (List<String>) t.get("participations");
+            if (!Objects.requireNonNull(users).isEmpty()){
+                firebaseFirestore.collection("events").document(id).update("participations", FieldValue.arrayUnion(email));
+            } else {
+                HashMap<String, List<String>> temp = new HashMap<>();
+                List<String> emails = new ArrayList<>();
+                emails.add(email);
+                temp.put("participations", emails);
+                firebaseFirestore.collection("events").document(id).set(temp);
+            }
+        });
     }
 
-    //--------------------------------------------------------------------
+    public void loadParticipations(OnLoadedParticipationListener listener, String eventId){
+        firebaseFirestore.collection("events").document(eventId)
+                .get().addOnCompleteListener(t -> {
+                    if (t.isSuccessful()){
+                        listener.onLoaded((List<String>) t.getResult().get("participations"));
+                    }
+                    listener.onNotLoaded();
+                });
+    }
 }

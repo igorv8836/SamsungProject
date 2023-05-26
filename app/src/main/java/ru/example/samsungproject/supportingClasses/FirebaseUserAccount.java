@@ -5,6 +5,8 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 import ru.example.samsungproject.interfaces.UserListener.OnPasswordChangedListener;
 import ru.example.samsungproject.interfaces.UserListener.OnReauthenticatedListener;
 
@@ -39,7 +41,7 @@ public class FirebaseUserAccount {
     }
 
     public void Reauthenticate(String password, OnReauthenticatedListener listener){
-        AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), password);
+        AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(currentUser.getEmail()), password);
 
         currentUser.reauthenticate(credential)
                 .addOnCompleteListener(task -> {

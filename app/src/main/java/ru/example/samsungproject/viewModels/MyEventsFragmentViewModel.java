@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ru.example.samsungproject.interfaces.EventsListeners.OnEventManagedListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsListener;
@@ -93,7 +94,7 @@ public class MyEventsFragmentViewModel extends ViewModel implements OnResponseTo
 
     public void deleteInvitation(String id){
         List<Invitation> temp = invitations.getValue();
-        for (Invitation invitation : temp){
+        for (Invitation invitation : Objects.requireNonNull(temp)){
             if (invitation.geteventId().equals(id)) {
                 temp.remove(invitation);
                 invitations.setValue(temp);

@@ -1,10 +1,10 @@
 package ru.example.samsungproject.fragments.basic;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -25,10 +25,10 @@ public class MyEventsFragment extends Fragment {
     MyEventsFragmentViewModel viewModel;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentMyEventsBinding.inflate(inflater, container, false);
-        viewModel = new MyEventsFragmentViewModel();
+        viewModel = new ViewModelProvider(this).get(MyEventsFragmentViewModel.class);
 
         viewModel.loadMyEvents();
         viewModel.loadInvitations();
@@ -38,29 +38,23 @@ public class MyEventsFragment extends Fragment {
                     .navigate(R.id.editEventFragment)
         );
 
-        binding.buttonMyEvents.setOnClickListener(t -> {
-            viewModel.changeMyEventsRecyclerViewVisibility();
-        });
+        binding.buttonMyEvents.setOnClickListener(t ->
+                viewModel.changeMyEventsRecyclerViewVisibility());
 
-        binding.buttonOtherEvents.setOnClickListener(t -> {
-            viewModel.changeOtherEventsRecyclerViewVisibility();
-        });
+        binding.buttonOtherEvents.setOnClickListener(t ->
+                viewModel.changeOtherEventsRecyclerViewVisibility());
 
-        binding.buttonInvitations.setOnClickListener(t -> {
-            viewModel.changeInvitationsRecyclerViewVisibility();
-        });
+        binding.buttonInvitations.setOnClickListener(t ->
+                viewModel.changeInvitationsRecyclerViewVisibility());
 
-        viewModel.myEventsRecyclerViewVisibility.observe(getViewLifecycleOwner(), t -> {
-            binding.recyclerViewMyEvents.setVisibility(t);
-        });
+        viewModel.myEventsRecyclerViewVisibility.observe(getViewLifecycleOwner(), t ->
+                binding.recyclerViewMyEvents.setVisibility(t));
 
-        viewModel.otherEventsRecyclerViewVisibility.observe(getViewLifecycleOwner(), t -> {
-            binding.recyclerViewOtherEvents.setVisibility(t);
-        });
+        viewModel.otherEventsRecyclerViewVisibility.observe(getViewLifecycleOwner(), t ->
+                binding.recyclerViewOtherEvents.setVisibility(t));
 
-        viewModel.invitationsRecyclerViewVisibility.observe(getViewLifecycleOwner(), t -> {
-            binding.recyclerViewInvitations.setVisibility(t);
-        });
+        viewModel.invitationsRecyclerViewVisibility.observe(getViewLifecycleOwner(), t ->
+                binding.recyclerViewInvitations.setVisibility(t));
 
         viewModel.myEvents.observe(getViewLifecycleOwner(), t -> {
             EventsAdapter adapter = new EventsAdapter(requireContext(), t, viewModel);

@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import ru.example.samsungproject.databinding.FragmentAboutAppBinding;
-import ru.example.samsungproject.databinding.FragmentFeedbackBinding;
 
 public class AboutAppFragment extends Fragment{
     private FragmentAboutAppBinding binding;

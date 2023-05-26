@@ -34,6 +34,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
     private List<Task> data;
     private final LayoutInflater localInflater;
     private OnTaskButtonListener listener;
+    private boolean changeFromUser = true;
 
     public TasksAdapter(Context context, List<Task> data, TasksFragmentViewModel viewModel) {
         this.data = data;
@@ -103,6 +104,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
         holder.percentCompleted.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                changeFromUser = false;
                 holder.isCompleted.setChecked(progress == 100);
             }
 
@@ -120,15 +122,19 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
         holder.isCompleted.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!changeFromUser)
+                    return;
                 int p = 100;
-                if (!isChecked) {
-                    p = 0;
-                    holder.percentCompleted.setProgress(0, true);
-                } else {
-                    task.setPercentCompleted(100);
+                if (isChecked) {
+                    task.setPercentCompleted(p);
                     holder.percentCompleted.setProgress(100, true);
+                } else {
+                    p = 0;
+                    task.setPercentCompleted(p);
+                    holder.percentCompleted.setProgress(0, true);
                 }
                 listener.changeCompleted(task.getId(), p, isChecked);
+                changeFromUser = true;
             }
         });
 

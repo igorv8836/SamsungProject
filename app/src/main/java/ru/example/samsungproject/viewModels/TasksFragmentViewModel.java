@@ -104,10 +104,16 @@ public class TasksFragmentViewModel extends ViewModel implements OnTaskButtonLis
 
     @Override
     public void changeCompleted(String taskId, int percent, boolean isCompleted) {
-        if (percent == 100)
-            repository.changeCompleted(taskId, eventId, percent, true);
-        else
-            repository.changeCompleted(taskId, eventId, percent, isCompleted);
+        List<Task> list = data.getValue();
+        for (Task task : list){
+            if (task.getId().equals(taskId)){
+                task.setCompleted(isCompleted);
+                task.setPercentCompleted(percent);
+                break;
+            }
+        }
+        data.setValue(list);
+        repository.changeCompleted(taskId, eventId, percent, isCompleted);
     }
 
     @Override

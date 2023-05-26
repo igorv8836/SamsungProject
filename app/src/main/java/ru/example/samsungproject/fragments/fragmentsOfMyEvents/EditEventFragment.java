@@ -31,7 +31,8 @@ public class EditEventFragment extends Fragment {
         if (getArguments() != null) {
             viewModel.loadFromBundle(getArguments());
         }
-        viewModel.addCreatorUser();
+        else
+            viewModel.addCreatorUser();
 
         binding.buttonAddUser.setOnClickListener(t -> {
             viewModel.addUser(binding.editTextEmailNewUserInputText.getText().toString());
@@ -49,14 +50,11 @@ public class EditEventFragment extends Fragment {
         });
 
         binding.buttonSaveEvent.setOnClickListener(t -> {
-            if (getArguments() == null)
-                viewModel.createEvent(binding.editTextTitleInputText.getText().toString(),
-                        binding.editTextDescriptionInputText.getText().toString(),
-                        binding.editTextDateInputText.getText().toString(),
-                        viewModel.users.getValue(),
-                        binding.access.isActivated());
-            else
-                viewModel.update();
+            viewModel.createEvent(binding.editTextTitleInputText.getText().toString(),
+                    binding.editTextDescriptionInputText.getText().toString(),
+                    binding.editTextDateInputText.getText().toString(),
+                    viewModel.users.getValue(),
+                    binding.access.isActivated());
         });
 
         viewModel.eventIsCreated.observe(getViewLifecycleOwner(), t -> {

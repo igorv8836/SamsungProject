@@ -15,6 +15,7 @@ import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListen
 import ru.example.samsungproject.interfaces.EventsListeners.OnDeletedTaskListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedUsersForEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
 import ru.example.samsungproject.interfaces.OnUserAddedListener;
@@ -50,8 +51,12 @@ public class FirestoreEventsRepository {
         firestoreEventsDB.CreateEvent(l, Title, Description, currentUser.getEmail(), access, users);
     }
 
-    public void updateEvent(String eventId, String Title, String Description, String Date, List<User> users, Boolean access){
-        firestoreEventsDB.updateEvent(eventId, Title, Description, Date, access, users);
+    public void updateEvent(String eventId, String Title, String Description, String Date, List<User> users, List<User> newUsers, Boolean access){
+        firestoreEventsDB.updateEvent(eventId, Title, Description, access, users, newUsers);
+    }
+
+    public void loadUsersForEvent(OnLoadedUsersForEventListener listener, String eventId){
+        firestoreEventsDB.loadUsersForEvent(listener, eventId);
     }
 
     public void loadEvents(OnLoadedMyEventsListener l){

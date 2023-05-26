@@ -21,6 +21,7 @@ import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListen
 import ru.example.samsungproject.interfaces.EventsListeners.OnDeletedTaskListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedUsersForEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
 import ru.example.samsungproject.interfaces.UserListener.OnInvitationsLoadedListener;
@@ -42,7 +43,6 @@ public class FirestoreEventsDB {
             instance = new FirestoreEventsDB();
         }
         return instance;
-
     }
 
     public void CreateEvent(OnCreatedEventListener listener, String title, String description, String admin, Boolean access, List<User> users){
@@ -75,12 +75,14 @@ public class FirestoreEventsDB {
         listener.OnCreatedEvent();
     }
 
-    public void updateEvent(String eventId, String title, String description, Boolean access, List<User> users){
+    public void updateEvent(String eventId, String title, String description, Boolean access, List<User> users, List<User> newUsers){
         if (title.isEmpty() || description.isEmpty()) {
             return;
         }
 
         List<String> emails = new ArrayList<>();
+        for (User user : users)
+            emails.add(user.getEmail());
 
         DocumentReference newDoc = firebaseFirestore.collection("events").document(eventId);
 
@@ -95,9 +97,10 @@ public class FirestoreEventsDB {
 
         CollectionReference members = newDoc.collection("members");
         for (User user : users){
-            members.document(user.getEmail()).set(user);
-            if (!admin.equals(user.getEmail()))
-                SendInvitation(user.getEmail(), newDoc.getId());
+            members.document(user.getEmail()).update("admin", user.isAdmin());
+            for (User newUser : newUsers) {
+                SendInvitation(newUser.getEmail(), newDoc.getId());
+            }
         }
     }
 
@@ -105,21 +108,6 @@ public class FirestoreEventsDB {
         firebaseFirestore.collection("users")
                 .document(email)
                 .update("invitations", FieldValue.arrayUnion(id));
-    }
-
-    public void ChangeEvent(OnChangedEventListener l, String name, String title, String description, Boolean access){
-        Map<String, Object> data = new HashMap<>();
-        data.put("Title", title);
-        data.put("Description", description);
-        data.put("access", access);
-        firebaseFirestore.collection("events")
-                .document(name).update(data)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful())
-                        l.OnChangedEvent();
-                    else
-                        l.OnNotChangedEvent();
-                });
     }
 
     public void DeleteEvent(OnDeletedTaskListener l, String id){
@@ -132,6 +120,72 @@ public class FirestoreEventsDB {
                         l.OnNotDeletedTask();
                 });
     }
+
+    public void loadEvents(OnLoadedMyEventsListener l, String email){
+        firebaseFirestore.collection("events").whereArrayContains("users", email)
+                .get().addOnSuccessListener(t -> {
+                    List<Event> temp = t.toObjects(Event.class);
+                    List<Event> myEvents = new ArrayList<>();
+                    List<Event> otherEvents = new ArrayList<>();
+                    int i = 0;
+                    for (Event event : temp){
+                        t.getDocuments().get(i).getReference().collection("members").get().addOnCompleteListener(d -> {
+                            if (d.isSuccessful()) {
+                                event.setMembersFromFirebase(d.getResult());
+                                //System.out.println(123);
+                            } else
+                                l.onNotLoadedMyEvents("Error");
+                            event.setCurrentUserEmail(email);
+                            if (!event.getAdmin().equals(email)){
+                                otherEvents.add(event);
+                            } else {
+                                myEvents.add(event);
+                            }
+                            l.onLoadedMyEvents(myEvents, otherEvents);
+                        });
+                        i++;
+                    }
+                });
+    }
+
+    public void loadEvent(OnLoadedEventListener l, String id){
+        firebaseFirestore.collection("events").document(id).get().addOnCompleteListener(t -> {
+            Event event = t.getResult().toObject(Event.class);
+            firebaseFirestore.collection("events").document(id).collection("members").get().addOnCompleteListener(d -> {
+                event.setMembersFromFirebase(d.getResult());
+                l.onLoadedEvent(event);
+            });
+        });
+    }
+
+    public void searchEvents(OnSearchedEventListener l, String name, String currentEmail){
+        firebaseFirestore.collection("events").
+                whereGreaterThanOrEqualTo("Title", name).whereLessThan("Title", name + "\uf8ff").get().addOnCompleteListener(t -> {
+                    if (t.isSuccessful()){
+                        List<Event> temp = t.getResult().toObjects(Event.class);
+                        List<Event> search_event = new ArrayList<>();
+                        for (Event event : temp){
+                            if (!event.getUsers().contains(currentEmail))
+                                search_event.add(event);
+                        }
+                        l.onSearchedEvent(search_event);
+                    } else{
+                        l.onNotSearchedEvent(t.getException().toString());
+                    }
+                });
+    }
+
+    public void loadUsersForEvent(OnLoadedUsersForEventListener listener, String eventId){
+        firebaseFirestore.collection("events").document(eventId)
+                .collection("users").get().addOnCompleteListener(t -> {
+                    if (t.isSuccessful()){
+                        List<User> users = t.getResult().toObjects(User.class);
+                        listener.OnLoadedUsers(users);
+                    }
+                });
+    }
+
+    //-----------------------------------------------------------------------------------
 
     public void AddTask(OnAddedTaskListener l, String eventId, String title, String description, String user, int price){
         Map<String, Object> data = new HashMap<>();
@@ -205,6 +259,28 @@ public class FirestoreEventsDB {
                 });
     }
 
+    public void loadTasks(OnAddedTasksListener listener, String eventId){
+        firebaseFirestore.
+                collection("events").
+                document(eventId).collection("tasks").get().
+                addOnCompleteListener(t -> {
+                    if (t.isSuccessful()){
+                        List<Task> data = t.getResult().toObjects(Task.class);
+                        for (Task task : data) {
+                            task.setCompleted(task.getPercentCompleted() == 100);
+                        }
+                        listener.OnAddedTasks(data);
+                    } else {
+                        listener.OnNotAddedTasks();
+                        Log.w("TAG", t.getException());
+                    }
+
+                });
+
+    }
+
+    //--------------------------------------------------------------------------------------------
+
     public void SearchUserByEmail(OnSearchedUserListener l, String email, boolean isCreator){
         if (email.isEmpty()) {
             l.OnNotSearchedUser();
@@ -220,43 +296,6 @@ public class FirestoreEventsDB {
                     } else
                         l.OnNotSearchedUser();
                 });
-    }
-
-    public void loadEvents(OnLoadedMyEventsListener l, String email){
-        firebaseFirestore.collection("events").whereArrayContains("users", email)
-                .get().addOnSuccessListener(t -> {
-                    List<Event> temp = t.toObjects(Event.class);
-                    List<Event> myEvents = new ArrayList<>();
-                    List<Event> otherEvents = new ArrayList<>();
-                    int i = 0;
-                    for (Event event : temp){
-                        t.getDocuments().get(i).getReference().collection("members").get().addOnCompleteListener(d -> {
-                            if (d.isSuccessful()) {
-                                event.setMembersFromFirebase(d.getResult());
-                                //System.out.println(123);
-                            } else
-                                l.onNotLoadedMyEvents("Error");
-                            event.setCurrentUserEmail(email);
-                            if (!event.getAdmin().equals(email)){
-                                otherEvents.add(event);
-                            } else {
-                                myEvents.add(event);
-                            }
-                            l.onLoadedMyEvents(myEvents, otherEvents);
-                        });
-                        i++;
-                    }
-                });
-    }
-
-    public void loadEvent(OnLoadedEventListener l, String id){
-        firebaseFirestore.collection("events").document(id).get().addOnCompleteListener(t -> {
-            Event event = t.getResult().toObject(Event.class);
-            firebaseFirestore.collection("events").document(id).collection("members").get().addOnCompleteListener(d -> {
-                event.setMembersFromFirebase(d.getResult());
-                l.onLoadedEvent(event);
-            });
-        });
     }
 
     public void loadInvitation(OnInvitationsLoadedListener l, String email){
@@ -308,23 +347,6 @@ public class FirestoreEventsDB {
         });
     }
 
-    public void searchEvents(OnSearchedEventListener l, String name, String currentEmail){
-        firebaseFirestore.collection("events").
-                whereGreaterThanOrEqualTo("Title", name).whereLessThan("Title", name + "\uf8ff").get().addOnCompleteListener(t -> {
-                    if (t.isSuccessful()){
-                        List<Event> temp = t.getResult().toObjects(Event.class);
-                        List<Event> search_event = new ArrayList<>();
-                        for (Event event : temp){
-                            if (!event.getUsers().contains(currentEmail))
-                                search_event.add(event);
-                        }
-                        l.onSearchedEvent(search_event);
-                    } else{
-                        l.onNotSearchedEvent(t.getException().toString());
-                    }
-                });
-    }
-
     public void sendParticipation(String id, String email){
         //List<String> users;
 
@@ -339,24 +361,5 @@ public class FirestoreEventsDB {
 //        });
     }
 
-    public void loadTasks(OnAddedTasksListener listener, String eventId){
-        firebaseFirestore.
-                collection("events").
-                document(eventId).collection("tasks").get().
-                addOnCompleteListener(t -> {
-                    if (t.isSuccessful()){
-                        List<Task> data = t.getResult().toObjects(Task.class);
-                        for (Task task : data) {
-                            task.setCompleted(task.getPercentCompleted() == 100);
-                        }
-                        listener.OnAddedTasks(data);
-                    } else {
-                        listener.OnNotAddedTasks();
-                        Log.w("TAG", t.getException());
-                    }
-
-        });
-
-    }
-
+    //--------------------------------------------------------------------
 }

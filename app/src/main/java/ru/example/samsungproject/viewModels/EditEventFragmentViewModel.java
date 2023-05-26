@@ -1,6 +1,7 @@
 package ru.example.samsungproject.viewModels;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
@@ -13,6 +14,7 @@ import java.util.Objects;
 import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedMyEventsListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedUsersForEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnUserStatusClickListener;
 import ru.example.samsungproject.interfaces.OnUserAddedListener;
@@ -29,6 +31,7 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
     public MutableLiveData<String> description = new MutableLiveData<>();
     public MutableLiveData<Boolean> access = new MutableLiveData<>();
     private String eventId;
+    private boolean fromExistEvent = false;
     FirestoreEventsRepository repository = new FirestoreEventsRepository();
 
     public void addUser(String Email){
@@ -62,6 +65,10 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
     }
 
     public void createEvent(String Title, String Description, String Date, List<User> users, Boolean access){
+        if (fromExistEvent) {
+            update(Title, Description, Date, users, access);
+            return;
+        }
         repository.CreateNewEvent(new OnCreatedEventListener() {
             @Override
             public void OnCreatedEvent() {
@@ -79,6 +86,7 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
     public void loadFromBundle(Bundle bundle){
         String id = bundle.getString("id");
         if (!id.isEmpty()){
+            fromExistEvent = true;
             eventId = id;
             repository.loadEvent(new OnLoadedEventListener() {
                 @Override
@@ -91,14 +99,23 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
 
                 @Override
                 public void onNotLoadedEvent(String message) {
-
                 }
             }, id);
         }
     }
 
     public void update(String Title, String Description, String Date, List<User> users, Boolean access){
-        repository.updateEvent(eventId, Title, Description, Date, users, access);
+        repository.loadUsersForEvent(new OnLoadedUsersForEventListener() {
+            @Override
+            public void OnLoadedUsers(List<User> list) {
+                repository.updateEvent(eventId, Title, Description, Date, users, list, access);
+            }
+
+            @Override
+            public void OnNotLoadedUsers() {
+                Log.w("TAG", "Error");
+            }
+        }, eventId);
     }
 
     @Override

@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         //проверка на авторизацию, есть ли авторизация, либо null
         FirebaseUser currentUser = mAuth.getCurrentUser(); //текущий пользователь
         if (currentUser != null) {
+            System.out.println(currentUser.getEmail());
             Toast.makeText(this, "Вы авторизованы", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Вы не авторизованы!", Toast.LENGTH_SHORT).show();

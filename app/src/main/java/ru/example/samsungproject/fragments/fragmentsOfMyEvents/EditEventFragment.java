@@ -34,6 +34,7 @@ public class EditEventFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(EditEventFragmentViewModel.class);
 
         if (getArguments() != null) {
+            binding.buttonDelete.setVisibility(View.VISIBLE);
             viewModel.loadFromBundle(getArguments());
         }
         else
@@ -62,7 +63,15 @@ public class EditEventFragment extends Fragment {
             Toast.makeText(requireContext(), "Сохранено", Toast.LENGTH_SHORT).show();
         });
 
+        binding.buttonDelete.setOnClickListener(t -> viewModel.deleteEvent());
+
         viewModel.eventIsCreated.observe(getViewLifecycleOwner(), t -> {
+            if (t)
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        .navigate(R.id.myEventsFragment);
+        });
+
+        viewModel.returnFragment.observe(getViewLifecycleOwner(), t -> {
             if (t)
                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                         .navigate(R.id.myEventsFragment);

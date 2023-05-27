@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 import ru.example.samsungproject.interfaces.EventsListeners.OnCreatedEventListener;
+import ru.example.samsungproject.interfaces.EventsListeners.OnDeletedTaskListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnLoadedUsersForEventListener;
 import ru.example.samsungproject.interfaces.EventsListeners.OnSearchedUserListener;
@@ -27,6 +28,7 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
     public MutableLiveData<String> title = new MutableLiveData<>();
     public MutableLiveData<String> description = new MutableLiveData<>();
     public MutableLiveData<Boolean> access = new MutableLiveData<>();
+    public MutableLiveData<Boolean> returnFragment = new MutableLiveData<>();
     private String eventId;
     private boolean fromExistEvent = false;
     FirestoreEventsRepository repository = new FirestoreEventsRepository();
@@ -106,6 +108,7 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
             @Override
             public void OnLoadedUsers(List<User> list) {
                 repository.updateEvent(eventId, Title, Description, Date, users, list, access);
+                returnFragment.setValue(true);
             }
 
             @Override
@@ -141,6 +144,20 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
         users.setValue(temp);
     }
 
+    public void deleteEvent(){
+        repository.deleteEvent(new OnDeletedTaskListener() {
+            @Override
+            public void OnDeletedTask() {
+                returnFragment.setValue(true);
+            }
+
+            @Override
+            public void OnNotDeletedTask() {
+
+            }
+        }, eventId);
+    }
+
     public String getEventId() {
         return eventId;
     }
@@ -148,4 +165,5 @@ public class EditEventFragmentViewModel extends ViewModel implements OnUserStatu
     public void setEventId(String eventId) {
         this.eventId = eventId;
     }
+
 }

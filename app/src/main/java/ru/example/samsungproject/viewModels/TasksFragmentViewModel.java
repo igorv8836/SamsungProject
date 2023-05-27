@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,13 +48,16 @@ public class TasksFragmentViewModel extends ViewModel implements OnTaskButtonLis
     public void addNewTask(){
         List<Task> temp = data.getValue();
         Task task = new Task("","", "", 0, "", true);
-        Objects.requireNonNull(temp).add(task);
+        if (temp == null)
+            temp = new ArrayList<>();
+        temp.add(task);
+        List<Task> finalTemp = temp;
         repository.addTask(new OnAddedTaskListener() {
             @Override
             public void OnAddedTask(String id, String author) {
                 task.setId(id);
                 task.setAuthor(author);
-                data.setValue(temp);
+                data.setValue(finalTemp);
             }
 
             @Override

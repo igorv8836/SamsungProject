@@ -126,4 +126,8 @@ public class FirestoreEventsRepository {
     public void deleteTask(OnDeletedTaskListener listener, String taskId, String eventId){
         firestoreEventsDB.DeleteTask(listener, eventId, taskId);
     }
+
+    public void deleteEvent(OnDeletedTaskListener listener, String eventId){
+        firestoreEventsDB.DeleteEvent(listener, eventId);
+    }
 }
